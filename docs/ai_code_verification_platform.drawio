@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Cursor" version="29.0.3" type="device" pages="2">
+  <diagram id="architecture" name="Arquitectura lógica">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2240" pageHeight="1474" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="&lt;font style=&quot;font-size: 18px; color: #ffffff&quot;&gt;&lt;b&gt;Plataforma de verificación, planificación y aprendizaje para agentes de programación&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px; color: #ffffff&quot;&gt;Arquitectura lógica. Las decisiones se apoyan en evidencia reproducible. Un fallo crítico no se compensa con otras puntuaciones.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f4e79;strokeColor=#1f4e79;fontColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=16;spacingRight=12;" vertex="1" parent="1">
+          <mxGeometry x="28" y="16" width="2180" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="in_nl" value="Requisitos en lenguaje natural" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="96" width="250" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="in_repo" value="Repositorio y código existente" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="580" y="96" width="250" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="in_human" value="Aprobación humana" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="96" width="260" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="sec_frame" value="&lt;font style=&quot;font-size: 13px; color: #7a2e2a&quot;&gt;&lt;b&gt;12 · Seguridad, auditoría y confianza (no es opcional)&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px; color: #7a2e2a&quot;&gt;Aislamiento del código generado · mínimo privilegio · secretos · red y archivos acotados · contratos y pruebas críticas protegidos · traza de cada cambio y de qué agente lo hizo · defensa ante instrucciones maliciosas en el repo · historial de decisiones · evidencias reproducibles · aprobación humana · tope de reintentos y de gasto.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 6;strokeWidth=2;strokeColor=#b85450;fillColor=#fff8f8;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;spacingRight=12;fontSize=11;fontColor=#7a2e2a;" vertex="1" parent="1">
+          <mxGeometry x="28" y="156" width="2180" height="530" as="geometry"/>
+        </mxCell>
+        <mxCell id="contratos" value="&lt;b&gt;2 · Contratos verificables&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Lenguaje natural a contrato estructurado&lt;br&gt;• Ambigüedad, contradicción o huecos&lt;br&gt;• Criterios de aceptación observables&lt;br&gt;• Precondiciones, postcondiciones, invariantes&lt;br&gt;• Límites, permisos, estados, atomicidad, idempotencia&lt;br&gt;• Versión protegida del contrato aprobado&lt;br&gt;• Cada requisito ligado a pruebas y evidencias&lt;br&gt;• Humano si es crítico o no se puede interpretar&lt;br&gt;• F02 · F03 · F29&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="228" width="250" height="428" as="geometry"/>
+        </mxCell>
+        <mxCell id="plan" value="&lt;b&gt;1 · Planificador&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• PERT: optimista, probable, pesimista&lt;br&gt;• Descomposición en subtareas verificables&lt;br&gt;• Grafo de dependencias y camino crítico&lt;br&gt;• Incertidumbre y zonas de alto riesgo&lt;br&gt;• Iteración: generar, verificar, corregir, integrar&lt;br&gt;• Reestimación: previsto contra real&lt;br&gt;• Control de alcance&lt;br&gt;• Terminado = evidencia definida, no un diff&lt;br&gt;• F04 · F05 · F06&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="310" y="228" width="250" height="428" as="geometry"/>
+        </mxCell>
+        <mxCell id="agentes" value="&lt;b&gt;3 · Agentes de código&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Codex, Claude Code, Cursor y otros&lt;br&gt;• El router elige agente y modelo (F25)&lt;br&gt;• Recibe instrucciones y el contrato&lt;br&gt;• Subtareas independientes en paralelo&lt;br&gt;• Solo los archivos y el alcance permitidos&lt;br&gt;• Registro de diff y versión&lt;br&gt;• Reintentos acotados y reparación&lt;br&gt;• Modelo, tokens, tiempo y costo&lt;br&gt;• F01 · F07&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="580" y="228" width="250" height="428" as="geometry"/>
+        </mxCell>
+        <mxCell id="ast" value="&lt;b&gt;5 · AST y Code-to-Spec&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Parseo, funciones, ramas, retornos, excepciones&lt;br&gt;• Flujo de control, de datos y llamadas&lt;br&gt;• Estado y efectos secundarios&lt;br&gt;• Código vs requisitos, contrato y README&lt;br&gt;• Divergencia con archivo y línea&lt;br&gt;• El LLM explica; no sustituye la evidencia&lt;br&gt;• F11 · F12 · F13&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="850" y="228" width="250" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="search" value="&lt;b&gt;6 · Integración y búsqueda&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Escenarios entre componentes&lt;br&gt;• Fallos de red y de base de datos&lt;br&gt;• Concurrencia, timeouts, duplicados&lt;br&gt;• Genéticos solo si vencen a lo simple&lt;br&gt;• Fuzzing guiado por cobertura&lt;br&gt;• Reproducir, minimizar, vigilar regresiones&lt;br&gt;• F14 · F15 · F16 · F31&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="850" y="448" width="250" height="208" as="geometry"/>
+        </mxCell>
+        <mxCell id="verif" value="&lt;b&gt;4 · Verificación determinista&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Unitarias, integración, regresión&lt;br&gt;• Análisis estático y contratos&lt;br&gt;• Property-based testing y fuzzing&lt;br&gt;• Mutation testing&lt;br&gt;• Seguridad y autorización&lt;br&gt;• Concurrencia, transacciones, consistencia&lt;br&gt;• Verificación formal cuando sea viable&lt;br&gt;• Bloqueo automático ante fallo crítico&lt;br&gt;• F08 · F09 · F10&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="228" width="280" height="428" as="geometry"/>
+        </mxCell>
+        <mxCell id="decision" value="&lt;b&gt;7 · Riesgo y decisión&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Riesgo, criticidad, impacto, ataque&lt;br&gt;• Incertidumbre y historial de defectos&lt;br&gt;• Cantidad y calidad de la evidencia&lt;br&gt;• Profundidad de verificación&lt;br&gt;• Reglas que no se compensan&lt;br&gt;• PASS · FAIL · UNKNOWN · N/A&lt;br&gt;• F17 · F18&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="228" width="260" height="270" as="geometry"/>
+        </mxCell>
+        <mxCell id="salida" value="&lt;b&gt;Salida&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Reporte con hallazgos reproducibles y limitaciones&lt;br&gt;• CI/CD bloquea el cambio si falla una condición crítica&lt;br&gt;• F19 · F32&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="516" width="260" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="obs" value="&lt;b&gt;11 · Tokens, costo y observabilidad&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Tokens de entrada, salida y de razonamiento si el proveedor los reporta&lt;br&gt;• Costo por modelo, agente, tarea y proyecto&lt;br&gt;• Latencia, llamadas, reintentos y uso de herramientas&lt;br&gt;• Costo de las pruebas y de la ejecución&lt;br&gt;• Presupuesto máximo&lt;br&gt;• Costo por defecto detectado&lt;br&gt;• Medir consumo no es entrenar un modelo&lt;br&gt;• F26 · F27 · F33&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#d0e2f3;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1700" y="228" width="488" height="428" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn_frame" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;strokeColor=#9673a6;fillColor=#fbf8fd;verticalAlign=top;align=left;" vertex="1" parent="1">
+          <mxGeometry x="28" y="900" width="2180" height="268" as="geometry"/>
+        </mxCell>
+        <mxCell id="learn_title" value="&lt;font style=&quot;font-size: 12px; color: #5b3a6e&quot;&gt;&lt;b&gt;8–10 · Profesor, puntuación y aprendizaje. La etiqueta de correcto sale de un resultado comprobable. La opinión de otro modelo no es una verdad de referencia.&lt;/b&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="44" y="906" width="2148" height="34" as="geometry"/>
+        </mxCell>
+        <mxCell id="score" value="&lt;b&gt;9 · Scoring engine&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Detección de defectos&lt;br&gt;• Falsos positivos&lt;br&gt;• Cumplimiento del contrato&lt;br&gt;• Integración y calidad de evidencia&lt;br&gt;• Precisión PERT y costo por resultado&lt;br&gt;• Regresión y score ajustado al riesgo&lt;br&gt;• Métricas separadas, sin nota única&lt;br&gt;• F21&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="948" width="330" height="204" as="geometry"/>
+        </mxCell>
+        <mxCell id="teacher" value="&lt;b&gt;8 · Teacher / profesor&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Evalúa la estrategia, no solo el diff&lt;br&gt;• Propone evaluaciones y revisa fallos&lt;br&gt;• El autor del código no es el único juez&lt;br&gt;• Solo etiqueta con evidencia comprobable&lt;br&gt;• Gentleman profesor queda como este rol hasta confirmar el nombre&lt;br&gt;• F20&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="390" y="948" width="360" height="204" as="geometry"/>
+        </mxCell>
+        <mxCell id="memory" value="&lt;b&gt;Memoria de experiencias&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Tareas, decisiones, defectos y soluciones&lt;br&gt;• Modelo, pruebas, costo y duración real&lt;br&gt;• Base para reestimar PERT y riesgos&lt;br&gt;• F22 · F23&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="770" y="948" width="300" height="204" as="geometry"/>
+        </mxCell>
+        <mxCell id="rl" value="&lt;b&gt;10 · Estrategia y RL&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Primero reglas e historial medido&lt;br&gt;• Después, contextual bandit o RL&lt;br&gt;• Elige modelo, corte, pruebas, fuzz, mutation o revisión humana&lt;br&gt;• Recompensa = resultados verificados&lt;br&gt;• Tiene que superar una estrategia fija&lt;br&gt;• F24 · F25&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#fad7ac;strokeColor=#b46504;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="948" width="400" height="204" as="geometry"/>
+        </mxCell>
+        <mxCell id="bench" value="&lt;b&gt;Benchmark&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Detecta defectos que la línea base no ve&lt;br&gt;• El costo extra se tiene que justificar&lt;br&gt;• F30 · F33&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="948" width="280" height="204" as="geometry"/>
+        </mxCell>
+        <mxCell id="tbd" value="&lt;b&gt;Pendiente de identificar&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;• Ponyfill: sin enlace. En JavaScript suele ser una implementación compatible, no un contador de tokens.&lt;br&gt;• Capy: sin enlace.&lt;br&gt;• No se les asigna ninguna capacidad hasta tener el nombre o la URL.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;spacingBottom=6;fillColor=#f5f5f5;strokeColor=#999999;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1810" y="948" width="378" height="204" as="geometry"/>
+        </mxCell>
+        <mxCell id="prio1" value="&lt;b&gt;1. Contratos independientes&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;La IA no redefine por su cuenta qué significa que el código sea correcto.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="28" y="1188" width="424" height="96" as="geometry"/>
+        </mxCell>
+        <mxCell id="prio2" value="&lt;b&gt;2. Evidencia reproducible&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;La decisión se apoya en un resultado que se puede volver a ejecutar.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="468" y="1188" width="424" height="96" as="geometry"/>
+        </mxCell>
+        <mxCell id="prio3" value="&lt;b&gt;3. PERT y descomposición&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Cuándo la tarea es demasiado grande, cómo partirla y cómo cerrar cada parte.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="908" y="1188" width="424" height="96" as="geometry"/>
+        </mxCell>
+        <mxCell id="prio4" value="&lt;b&gt;4. Teacher, score, aprendizaje&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;El historial medido elige modelo, pruebas y estrategia.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1348" y="1188" width="424" height="96" as="geometry"/>
+        </mxCell>
+        <mxCell id="prio5" value="&lt;b&gt;5. Benchmark real&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Más defectos que la línea base, a un costo que se pueda justificar.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;spacingRight=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1788" y="1188" width="424" height="96" as="geometry"/>
+        </mxCell>
+        <mxCell id="build" value="&lt;font style=&quot;font-size: 13px&quot;&gt;&lt;b&gt;Orden de construcción&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;1. Contratos, pruebas deterministas, reportes de evidencia y un benchmark controlado.   2. AST y Code-to-Spec.   3. PERT y evaluación de riesgo.   4. Teacher y score, cuando ya haya historial confiable.   5. Reinforcement learning al final. El aprendizaje ajusta un verificador que ya funciona.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="28" y="1302" width="2180" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="foot" value="&lt;font style=&quot;font-size: 12px&quot;&gt;Ciclo: tarea, estimación PERT, agente y modelo, pruebas, resultados verificados, recompensa, actualización de la estrategia, tarea siguiente, comparación contra una estrategia fija. F34 (quién pagaría, y por qué) está en la página Lista maestra; no es un módulo de ejecución.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=12;" vertex="1" parent="1">
+          <mxGeometry x="28" y="1388" width="2180" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_nl" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="in_nl" target="contratos">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_repo" value="código y alcance" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="in_repo" target="agentes">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_human_dec" value="si es crítico" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="in_human" target="decision">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_human_contract" value="aprueba el contrato" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;entryX=0.72;entryY=0;" edge="1" parent="1" source="in_human" target="contratos">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1380" y="86"/><mxPoint x="220" y="86"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_c_p" value="contrato aprobado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.3;entryX=0;entryY=0.3;" edge="1" parent="1" source="contratos" target="plan">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_p_a" value="subtareas y alcance" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.3;entryX=0;entryY=0.3;" edge="1" parent="1" source="plan" target="agentes">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_a_ast" value="código" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.18;entryX=0;entryY=0.5;" edge="1" parent="1" source="agentes" target="ast">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_a_search" value="código" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.72;entryX=0;entryY=0.45;" edge="1" parent="1" source="agentes" target="search">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_ast_v" value="estructura y divergencias" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;entryX=0;entryY=0.18;" edge="1" parent="1" source="ast" target="verif">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_search_v" value="fallos reproducidos" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" edge="1" parent="1" source="search" target="verif">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_v_d" value="evidencia" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.22;entryX=0;entryY=0.35;" edge="1" parent="1" source="verif" target="decision">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_d_out" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="decision" target="salida">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_v_score" value="resultados verificados" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=0.35;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="verif" target="score">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1218" y="820"/><mxPoint x="205" y="820"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_s_t" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="score" target="teacher">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_t_m" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="teacher" target="memory">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_m_r" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="memory" target="rl">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_r_b" value="comparar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="rl" target="bench">
+          <mxGeometry relative="1" as="geometry"></mxGeometry>
+        </mxCell>
+        <mxCell id="e_feedback_plan" value="mejora PERT, corte de tarea y pruebas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;dashed=1;dashPattern=8 4;strokeColor=#9673a6;strokeWidth=1.75;fontSize=11;fontColor=#5b3a6e;labelBackgroundColor=#ffffff;exitX=0.25;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="rl" target="plan">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1190" y="868"/><mxPoint x="18" y="868"/><mxPoint x="18" y="690"/><mxPoint x="435" y="690"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_feedback_agent" value="elige modelo y estrategia" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;dashed=1;dashPattern=8 4;strokeColor=#9673a6;strokeWidth=1.75;fontSize=11;fontColor=#5b3a6e;labelBackgroundColor=#ffffff;exitX=0.62;exitY=0;entryX=0.62;entryY=1;" edge="1" parent="1" source="rl" target="agentes">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1338" y="735"/><mxPoint x="735" y="735"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_forbid" value="prohibido reescribir contratos o pruebas críticas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;dashed=1;dashPattern=6 4;strokeColor=#b85450;strokeWidth=1.75;fontSize=11;fontColor=#7a2e2a;labelBackgroundColor=#ffffff;exitX=0.28;exitY=1;entryX=0.5;entryY=1;" edge="1" parent="1" source="agentes" target="contratos">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="650" y="708"/><mxPoint x="165" y="708"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e_cost" value="tokens, latencia, costo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeWidth=1.5;fontSize=11;fontColor=#333333;labelBackgroundColor=#ffffff;orthogonalLoop=1;jettySize=auto;exitX=0.82;exitY=1;entryX=0.45;entryY=1;" edge="1" parent="1" source="agentes" target="obs">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="785" y="778"/><mxPoint x="1920" y="778"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="master-list" name="Lista maestra F01-F34">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2240" pageHeight="1352" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="p2title" value="&lt;font style=&quot;font-size: 16px; color: #ffffff&quot;&gt;&lt;b&gt;Lista maestra F01–F34. Conservar estas decisiones al construir. Ponyfill y Capy no están: faltan el nombre exacto o el enlace.&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f4e79;strokeColor=#1f4e79;fontColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=16;spacingRight=12;" vertex="1" parent="1">
+          <mxGeometry x="28" y="20" width="2156" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_contracts" value="Requisitos y contratos" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="28" y="100" width="700" height="268" as="geometry"/>
+        </mxCell>
+        <mxCell id="F02" value="&lt;b&gt;F02 · Interpretación de requisitos&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Detectar ambigüedad, contradicciones y requisitos incompletos.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#d6b656;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_contracts">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F03" value="&lt;b&gt;F03 · Contratos verificables&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Criterios de aceptación independientes del código.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#d6b656;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_contracts">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F29" value="&lt;b&gt;F29 · Protección de contratos&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Evitar que el agente altere sus propios criterios de aprobación.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#d6b656;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_contracts">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_plan" value="Planificación" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="28" y="388" width="700" height="268" as="geometry"/>
+        </mxCell>
+        <mxCell id="F04" value="&lt;b&gt;F04 · Planificación PERT&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Estimar duración, incertidumbre y esfuerzo.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_plan">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F05" value="&lt;b&gt;F05 · Descomposición de tareas&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Dividir trabajos complejos en subtareas comprobables.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_plan">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F06" value="&lt;b&gt;F06 · Grafo de dependencias&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Ordenar tareas e identificar el camino crítico.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_plan">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_gen" value="Generación" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="28" y="676" width="700" height="268" as="geometry"/>
+        </mxCell>
+        <mxCell id="F01" value="&lt;b&gt;F01 · Integración con agentes&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Codex, Claude Code, Cursor y otros.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#9673a6;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_gen">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F07" value="&lt;b&gt;F07 · Generación de código&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Ejecutar agentes dentro de límites definidos.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#9673a6;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_gen">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F25" value="&lt;b&gt;F25 · Enrutador de modelos&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Elegir según rendimiento, costo y tipo de tarea.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#9673a6;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_gen">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_sec" value="Ejecución segura" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#f8cecc;strokeColor=#b85450;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="28" y="964" width="700" height="124" as="geometry"/>
+        </mxCell>
+        <mxCell id="F28" value="&lt;b&gt;F28 · Seguridad de ejecución&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Aislar código, limitar permisos, proteger secretos y dejar auditoría.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#b85450;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_sec">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_ver" value="Verificación" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="756" y="100" width="700" height="556" as="geometry"/>
+        </mxCell>
+        <mxCell id="F08" value="&lt;b&gt;F08 · Pruebas deterministas&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Unitarias, integración y regresión.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ver">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F09" value="&lt;b&gt;F09 · Verificación de propiedades&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Invariantes y comportamientos generales.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ver">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F10" value="&lt;b&gt;F10 · Seguridad del producto&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Vulnerabilidades y fallos de autorización.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ver">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F14" value="&lt;b&gt;F14 · Pruebas de integración avanzadas&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Errores entre servicios y componentes.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ver">
+          <mxGeometry x="12" y="264" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F15" value="&lt;b&gt;F15 · Búsqueda de escenarios&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Casos límite y secuencias problemáticas.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ver">
+          <mxGeometry x="12" y="336" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F16" value="&lt;b&gt;F16 · Algoritmos genéticos&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Solo si superan a una alternativa sencilla.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ver">
+          <mxGeometry x="12" y="408" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F31" value="&lt;b&gt;F31 · Detección de regresiones&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Una corrección no debe introducir otro defecto.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ver">
+          <mxGeometry x="12" y="480" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_ast" value="Análisis de código" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="756" y="676" width="700" height="268" as="geometry"/>
+        </mxCell>
+        <mxCell id="F11" value="&lt;b&gt;F11 · Análisis AST&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Extraer estructura y comportamiento potencial.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ast">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F12" value="&lt;b&gt;F12 · Análisis de flujo&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Dependencias, datos y caminos de ejecución.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ast">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F13" value="&lt;b&gt;F13 · Code-to-Spec&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Comparar el código con requisitos y documentación.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_ast">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_dec" value="Decisión y salida" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#f5f5f5;strokeColor=#666666;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1484" y="100" width="700" height="340" as="geometry"/>
+        </mxCell>
+        <mxCell id="F17" value="&lt;b&gt;F17 · Evaluación de riesgo&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Qué profundidad de verificación necesita cada cambio.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#666666;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_dec">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F18" value="&lt;b&gt;F18 · Motor de decisión&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;PASS, FAIL, UNKNOWN o NOT_APPLICABLE.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#666666;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_dec">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F19" value="&lt;b&gt;F19 · Reportes con evidencia&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Resultados reproducibles, referencias y limitaciones.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#666666;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_dec">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F32" value="&lt;b&gt;F32 · Integración con CI/CD&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Bloquear cambios que incumplan condiciones críticas.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#666666;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_dec">
+          <mxGeometry x="12" y="264" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_learn" value="Aprendizaje" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#fad7ac;strokeColor=#b46504;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1484" y="460" width="700" height="412" as="geometry"/>
+        </mxCell>
+        <mxCell id="F20" value="&lt;b&gt;F20 · Teacher / profesor&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Evaluar resultados y proponer mejoras de estrategia.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#b46504;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_learn">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F21" value="&lt;b&gt;F21 · Score de calidad&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Eficacia, precisión, costo y calidad de la evidencia.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#b46504;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_learn">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F22" value="&lt;b&gt;F22 · Memoria de experiencias&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Decisiones, errores, soluciones e historial.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#b46504;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_learn">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F23" value="&lt;b&gt;F23 · Aprendizaje adaptativo&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Mejorar pruebas, estrategias y estimaciones.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#b46504;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_learn">
+          <mxGeometry x="12" y="264" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F24" value="&lt;b&gt;F24 · Reinforcement learning&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Recompensas basadas en resultados verificados.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#b46504;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_learn">
+          <mxGeometry x="12" y="336" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="g_cost" value="Costo, medida y negocio" style="swimlane;startSize=36;horizontal=1;rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=14;fillColor=#d0e2f3;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1484" y="892" width="700" height="412" as="geometry"/>
+        </mxCell>
+        <mxCell id="F26" value="&lt;b&gt;F26 · Contabilidad de tokens&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Consumo, latencia y costo por operación.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_cost">
+          <mxGeometry x="12" y="48" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F27" value="&lt;b&gt;F27 · Observabilidad&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Trazas, logs, métricas y versiones.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_cost">
+          <mxGeometry x="12" y="120" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F30" value="&lt;b&gt;F30 · Benchmark experimental&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Mejoras frente a herramientas y pruebas existentes.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_cost">
+          <mxGeometry x="12" y="192" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F33" value="&lt;b&gt;F33 · Evaluación económica&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Si la mejora justifica el costo computacional.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_cost">
+          <mxGeometry x="12" y="264" width="676" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="F34" value="&lt;b&gt;F34 · Validación comercial&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Quién pagaría, y por qué. No es un módulo de ejecución.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=8;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;" vertex="1" parent="g_cost">
+          <mxGeometry x="12" y="336" width="676" height="64" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
