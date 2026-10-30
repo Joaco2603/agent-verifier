@@ -1,0 +1,52 @@
+id: RF-13
+name: Name order
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: sort
+  inputs:
+    - aId
+    - bId
+observables:
+  - name: first
+    type: string
+    values:
+      - a
+      - b
+  - name: seen
+    type: number
+preconditions:
+  - id: a
+    type: input_constraint
+    field: aId
+    operator: gt
+    value: 0
+  - id: b
+    type: input_constraint
+    field: bId
+    operator: gt
+    value: 0
+cases:
+  - id: names
+    input:
+      aId: 2
+      bId: 1
+    expected:
+      first: a
+properties:
+  - id: floor
+    template: bounded_output
+    field: seen
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: names
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

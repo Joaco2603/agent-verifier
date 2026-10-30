@@ -1,0 +1,42 @@
+id: RF-09
+name: Password length
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: password
+  inputs:
+    - length
+observables:
+  - name: accepted
+    type: boolean
+  - name: seen
+    type: number
+preconditions:
+  - id: length
+    type: input_constraint
+    field: length
+    operator: gte
+    value: 0
+cases:
+  - id: nine
+    input:
+      length: 9
+    expected:
+      accepted: true
+properties:
+  - id: floor
+    template: bounded_output
+    field: seen
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: nine
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

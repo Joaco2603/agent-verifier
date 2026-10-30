@@ -1,0 +1,49 @@
+id: RF-20
+name: The daily limit is inclusive
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: limit
+  inputs:
+    - used
+    - limit
+observables:
+  - name: allowed
+    type: boolean
+  - name: seen
+    type: number
+preconditions:
+  - id: used
+    type: input_constraint
+    field: used
+    operator: gte
+    value: 0
+  - id: limit
+    type: input_constraint
+    field: limit
+    operator: gte
+    value: 0
+cases:
+  - id: edge
+    input:
+      used: 10
+      limit: 10
+    expected:
+      allowed: true
+properties:
+  - id: floor
+    template: bounded_output
+    field: seen
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: edge
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

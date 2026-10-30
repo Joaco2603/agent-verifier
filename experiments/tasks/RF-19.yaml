@@ -1,0 +1,45 @@
+id: RF-19
+name: Reject a negative quantity
+priority: critical
+gate: block
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: quantity
+  inputs:
+    - qty
+observables:
+  - name: status
+    type: string
+    values:
+      - REJECTED
+      - ACCEPTED
+  - name: seen
+    type: number
+preconditions:
+  - id: qty
+    type: input_constraint
+    field: qty
+    operator: gte
+    value: -100
+cases:
+  - id: neg
+    input:
+      qty: -1
+    expected:
+      status: REJECTED
+properties:
+  - id: floor
+    template: bounded_output
+    field: seen
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: neg
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

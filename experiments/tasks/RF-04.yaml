@@ -1,0 +1,40 @@
+id: RF-04
+name: At most three retries
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: retry
+  inputs:
+    - requested
+observables:
+  - name: attempts
+    type: number
+preconditions:
+  - id: requested
+    type: input_constraint
+    field: requested
+    operator: gte
+    value: 0
+cases:
+  - id: once
+    input:
+      requested: 1
+    expected:
+      attempts: 1
+properties:
+  - id: floor
+    template: bounded_output
+    field: attempts
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: once
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

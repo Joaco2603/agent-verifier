@@ -1,0 +1,52 @@
+id: RF-18
+name: A tie keeps the leader
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: score
+  inputs:
+    - leader
+    - challenger
+observables:
+  - name: winner
+    type: string
+    values:
+      - leader
+      - challenger
+  - name: seen
+    type: number
+preconditions:
+  - id: leader
+    type: input_constraint
+    field: leader
+    operator: gte
+    value: 0
+  - id: challenger
+    type: input_constraint
+    field: challenger
+    operator: gte
+    value: 0
+cases:
+  - id: tie
+    input:
+      leader: 5
+      challenger: 5
+    expected:
+      winner: leader
+properties:
+  - id: floor
+    template: bounded_output
+    field: seen
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: tie
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

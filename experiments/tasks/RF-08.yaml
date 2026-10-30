@@ -1,0 +1,47 @@
+id: RF-08
+name: Business days only
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: span
+  inputs:
+    - calendar
+    - weekend
+observables:
+  - name: days
+    type: number
+preconditions:
+  - id: calendar
+    type: input_constraint
+    field: calendar
+    operator: gte
+    value: 0
+  - id: weekend
+    type: input_constraint
+    field: weekend
+    operator: gte
+    value: 0
+cases:
+  - id: weekend
+    input:
+      calendar: 3
+      weekend: 2
+    expected:
+      days: 1
+properties:
+  - id: floor
+    template: bounded_output
+    field: days
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: weekend
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

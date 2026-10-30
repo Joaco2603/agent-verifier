@@ -1,0 +1,47 @@
+id: RF-06
+name: A user sees their orders
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: orders
+  inputs:
+    - own
+    - others
+observables:
+  - name: visible
+    type: number
+preconditions:
+  - id: own
+    type: input_constraint
+    field: own
+    operator: gte
+    value: 0
+  - id: others
+    type: input_constraint
+    field: others
+    operator: gte
+    value: 0
+cases:
+  - id: own-only
+    input:
+      own: 1
+      others: 4
+    expected:
+      visible: 1
+properties:
+  - id: floor
+    template: bounded_output
+    field: visible
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: own-only
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

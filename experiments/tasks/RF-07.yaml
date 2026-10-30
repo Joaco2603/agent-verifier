@@ -1,0 +1,40 @@
+id: RF-07
+name: Percent fee with a minimum
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: fee
+  inputs:
+    - price
+observables:
+  - name: fee
+    type: number
+preconditions:
+  - id: price
+    type: input_constraint
+    field: price
+    operator: gt
+    value: 0
+cases:
+  - id: small
+    input:
+      price: 10
+    expected:
+      fee: 1
+properties:
+  - id: floor
+    template: bounded_output
+    field: fee
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: small
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

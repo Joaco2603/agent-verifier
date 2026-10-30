@@ -1,0 +1,45 @@
+id: RF-15
+name: Timeout returns the fallback
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: fetch
+  inputs:
+    - wait
+observables:
+  - name: value
+    type: string
+    values:
+      - fallback
+      - error
+  - name: seen
+    type: number
+preconditions:
+  - id: wait
+    type: input_constraint
+    field: wait
+    operator: gte
+    value: 0
+cases:
+  - id: late
+    input:
+      wait: 100
+    expected:
+      value: fallback
+properties:
+  - id: floor
+    template: bounded_output
+    field: seen
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: late
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

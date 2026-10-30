@@ -1,0 +1,25 @@
+{
+  "id": "RF-02",
+  "claims": [
+    {
+      "kind": "precondition",
+      "id": "amount-positive",
+      "observation": "amount > 0"
+    },
+    {
+      "kind": "postcondition",
+      "id": "rejected",
+      "observation": "status is REJECTED"
+    },
+    {
+      "kind": "invariant",
+      "id": "no-negative-balance",
+      "observation": "balance_after >= 0"
+    },
+    {
+      "kind": "postcondition",
+      "id": "praise",
+      "observation": ""
+    }
+  ]
+}

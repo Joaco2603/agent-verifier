@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-skill-reviewer.local/contract.envelope.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "name", "priority", "gate", "revision", "approval",
+    "target", "observables", "preconditions", "cases",
+    "properties", "evidence", "limitations"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^RF-[0-9]{2,}$" },
+    "name": { "type": "string", "minLength": 1 },
+    "priority": { "enum": ["critical", "normal"] },
+    "gate": { "enum": ["block", "report"] },
+    "revision": { "type": "integer", "minimum": 1 },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "by"],
+      "properties": {
+        "status": { "enum": ["draft", "approved"] },
+        "by": { "type": "string", "minLength": 1 }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "inputs"],
+      "properties": {
+        "operation": { "type": "string", "minLength": 1 },
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "observables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "type": { "enum": ["number", "boolean", "string"] },
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "string" } },
+              "required": ["type"]
+            },
+            "then": { "required": ["values"] }
+          }
+        ]
+      }
+    },
+    "preconditions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/inputConstraint" }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "input", "expected"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "input": {
+            "type": "object",
+            "additionalProperties": { "type": ["string", "number", "boolean", "null"] }
+          },
+          "expected": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": { "type": ["string", "number", "boolean", "null"] }
+          }
+        }
+      }
+    },
+    "properties": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/boundedOutput" }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum"],
+      "properties": {
+        "minimum": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "ref"],
+            "properties": {
+              "kind": { "enum": ["example_case", "property"] },
+              "ref": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "priority": { "const": "critical" } },
+        "required": ["priority"]
+      },
+      "then": {
+        "properties": { "gate": { "const": "block" } }
+      }
+    }
+  ],
+  "$defs": {
+    "inputConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "field", "operator", "value"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "input_constraint" },
+        "field": { "type": "string", "minLength": 1 },
+        "operator": { "enum": ["gt", "gte", "lt", "lte", "eq"] },
+        "value": { "type": "number" }
+      }
+    },
+    "boundedOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "template", "field", "min"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "template": { "const": "bounded_output" },
+        "field": { "type": "string", "minLength": 1 },
+        "min": { "type": "number" },
+        "max": { "type": "number" }
+      }
+    }
+  }
+}

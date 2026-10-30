@@ -1,0 +1,47 @@
+id: RF-16
+name: Total includes tax
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: total
+  inputs:
+    - price
+    - rate
+observables:
+  - name: total
+    type: number
+preconditions:
+  - id: price
+    type: input_constraint
+    field: price
+    operator: gt
+    value: 0
+  - id: rate
+    type: input_constraint
+    field: rate
+    operator: gte
+    value: 0
+cases:
+  - id: tax
+    input:
+      price: 100
+      rate: 10
+    expected:
+      total: 110
+properties:
+  - id: floor
+    template: bounded_output
+    field: total
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: tax
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

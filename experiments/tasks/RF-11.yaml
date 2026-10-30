@@ -1,0 +1,47 @@
+id: RF-11
+name: First matching coupon
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: coupon
+  inputs:
+    - first
+    - second
+observables:
+  - name: discount
+    type: number
+preconditions:
+  - id: first
+    type: input_constraint
+    field: first
+    operator: gte
+    value: 0
+  - id: second
+    type: input_constraint
+    field: second
+    operator: gte
+    value: 0
+cases:
+  - id: two
+    input:
+      first: 10
+      second: 5
+    expected:
+      discount: 10
+properties:
+  - id: floor
+    template: bounded_output
+    field: discount
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: two
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

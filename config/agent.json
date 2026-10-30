@@ -1,0 +1,8 @@
+{
+  "agents": [
+    {
+      "name": "Cursor",
+      "command": "cursor"
+    }
+  ]
+}

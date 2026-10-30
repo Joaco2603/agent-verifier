@@ -1,0 +1,56 @@
+id: RF-02
+name: Reject an overdraft
+priority: critical
+gate: block
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: transfer
+  inputs:
+    - balance
+    - amount
+observables:
+  - name: status
+    type: string
+    values:
+      - REJECTED
+      - ACCEPTED
+  - name: balance_unchanged
+    type: boolean
+  - name: balance_after
+    type: number
+preconditions:
+  - id: amount
+    type: input_constraint
+    field: amount
+    operator: gt
+    value: 0
+  - id: balance
+    type: input_constraint
+    field: balance
+    operator: gte
+    value: 0
+cases:
+  - id: over
+    input:
+      balance: 100
+      amount: 150
+    expected:
+      status: REJECTED
+      balance_unchanged: true
+      balance_after: 100
+properties:
+  - id: floor
+    template: bounded_output
+    field: balance_after
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: over
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

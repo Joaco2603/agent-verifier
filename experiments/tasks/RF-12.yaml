@@ -1,0 +1,54 @@
+id: RF-12
+name: Refund unused days
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: refund
+  inputs:
+    - price
+    - used
+    - total
+observables:
+  - name: refund
+    type: number
+preconditions:
+  - id: price
+    type: input_constraint
+    field: price
+    operator: gt
+    value: 0
+  - id: used
+    type: input_constraint
+    field: used
+    operator: gte
+    value: 0
+  - id: total
+    type: input_constraint
+    field: total
+    operator: gt
+    value: 0
+cases:
+  - id: partial
+    input:
+      price: 100
+      used: 1
+      total: 4
+    expected:
+      refund: 75
+properties:
+  - id: floor
+    template: bounded_output
+    field: refund
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: partial
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

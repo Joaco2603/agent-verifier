@@ -1,0 +1,40 @@
+id: RF-03
+name: Round halves up
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: round
+  inputs:
+    - value
+observables:
+  - name: rounded
+    type: number
+preconditions:
+  - id: value
+    type: input_constraint
+    field: value
+    operator: gte
+    value: 0
+cases:
+  - id: half
+    input:
+      value: 1.5
+    expected:
+      rounded: 2
+properties:
+  - id: floor
+    template: bounded_output
+    field: rounded
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: half
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

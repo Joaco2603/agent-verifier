@@ -1,0 +1,45 @@
+id: RF-14
+name: Reject a duplicate email
+priority: critical
+gate: block
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: register
+  inputs:
+    - existing
+observables:
+  - name: status
+    type: string
+    values:
+      - REJECTED
+      - ACCEPTED
+  - name: seen
+    type: number
+preconditions:
+  - id: existing
+    type: input_constraint
+    field: existing
+    operator: gte
+    value: 0
+cases:
+  - id: dup
+    input:
+      existing: 1
+    expected:
+      status: REJECTED
+properties:
+  - id: floor
+    template: bounded_output
+    field: seen
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: dup
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

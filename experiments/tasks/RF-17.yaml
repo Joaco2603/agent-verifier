@@ -1,0 +1,47 @@
+id: RF-17
+name: Child fare is half
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: fare
+  inputs:
+    - age
+    - fare
+observables:
+  - name: due
+    type: number
+preconditions:
+  - id: age
+    type: input_constraint
+    field: age
+    operator: gte
+    value: 0
+  - id: fare
+    type: input_constraint
+    field: fare
+    operator: gt
+    value: 0
+cases:
+  - id: child
+    input:
+      age: 10
+      fare: 100
+    expected:
+      due: 50
+properties:
+  - id: floor
+    template: bounded_output
+    field: due
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: child
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

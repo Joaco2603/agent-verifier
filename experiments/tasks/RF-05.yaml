@@ -1,0 +1,40 @@
+id: RF-05
+name: No matching rows
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: filter
+  inputs:
+    - matches
+observables:
+  - name: count
+    type: number
+preconditions:
+  - id: matches
+    type: input_constraint
+    field: matches
+    operator: gte
+    value: 0
+cases:
+  - id: none
+    input:
+      matches: 0
+    expected:
+      count: 0
+properties:
+  - id: floor
+    template: bounded_output
+    field: count
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: none
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

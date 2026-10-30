@@ -1,0 +1,1 @@
+Return no rows when the filter matches nothing.

@@ -1,0 +1,47 @@
+id: RF-01
+name: Discount up to 30 percent
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: discount
+  inputs:
+    - price
+    - percent
+observables:
+  - name: total
+    type: number
+preconditions:
+  - id: price
+    type: input_constraint
+    field: price
+    operator: gt
+    value: 0
+  - id: percent
+    type: input_constraint
+    field: percent
+    operator: gte
+    value: 0
+cases:
+  - id: partial
+    input:
+      price: 100
+      percent: 10
+    expected:
+      total: 90
+properties:
+  - id: floor
+    template: bounded_output
+    field: total
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: partial
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.

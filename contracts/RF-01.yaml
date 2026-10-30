@@ -1,0 +1,55 @@
+id: RF-01
+name: Reject a transfer above the available balance
+priority: critical
+gate: block
+revision: 1
+approval:
+  status: approved
+  by: product-owner
+target:
+  operation: transfer
+  inputs: [balance, amount]
+observables:
+  - name: status
+    type: string
+    values: [REJECTED, ACCEPTED]
+  - name: balance_unchanged
+    type: boolean
+  - name: transaction_created
+    type: boolean
+  - name: balance_after
+    type: number
+preconditions:
+  - id: amount-positive
+    type: input_constraint
+    field: amount
+    operator: gt
+    value: 0
+  - id: balance-non-negative
+    type: input_constraint
+    field: balance
+    operator: gte
+    value: 0
+cases:
+  - id: overdraft-rejected
+    input:
+      balance: 100
+      amount: 150
+    expected:
+      status: REJECTED
+      balance_unchanged: true
+      transaction_created: false
+properties:
+  - id: no-negative-balance
+    template: bounded_output
+    field: balance_after
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: overdraft-rejected
+    - kind: property
+      ref: no-negative-balance
+limitations:
+  - Does not define currency, concurrency, persistence, or how a transaction is stored.
+  - balance_after >= 0 alone does not show that the transfer was rejected.

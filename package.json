@@ -1,0 +1,13 @@
+{
+  "name": "ai-skill-reviewer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "memory": "node src/memory/cli.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "yaml": "^2.8.0"
+  }
+}

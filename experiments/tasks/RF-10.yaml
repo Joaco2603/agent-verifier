@@ -1,0 +1,47 @@
+id: RF-10
+name: Do not sell past stock
+priority: normal
+gate: report
+revision: 1
+approval:
+  status: approved
+  by: experimenter
+target:
+  operation: sell
+  inputs:
+    - stock
+    - requested
+observables:
+  - name: sold
+    type: number
+preconditions:
+  - id: stock
+    type: input_constraint
+    field: stock
+    operator: gte
+    value: 0
+  - id: requested
+    type: input_constraint
+    field: requested
+    operator: gte
+    value: 0
+cases:
+  - id: short
+    input:
+      stock: 2
+      requested: 5
+    expected:
+      sold: 2
+properties:
+  - id: floor
+    template: bounded_output
+    field: sold
+    min: 0
+evidence:
+  minimum:
+    - kind: example_case
+      ref: short
+    - kind: property
+      ref: floor
+limitations:
+  - Does not define persistence, concurrency, or currency.
