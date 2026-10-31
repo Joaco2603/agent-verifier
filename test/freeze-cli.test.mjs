@@ -1,29 +1,36 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { chmodSync, mkdtempSync, readFileSync, rmSync, statSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, statSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { decide, recallPrevious } from "../src/freeze/cli.mjs";
+import { decide, receiptFile, recallPrevious } from "../src/freeze/cli.mjs";
 import { readCandidate } from "../src/freeze/read.mjs";
 
 test("the freeze script cites the real HEAD and does not approve from this tree", () => {
-  const head = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" });
-  const candidate = readCandidate();
-  assert.equal(candidate.hash, head.stdout.trim());
-  const run = spawnSync(process.execPath, ["src/freeze/cli.mjs"], { encoding: "utf8" });
-  const result = JSON.parse(run.stdout);
-  assert.equal(run.status, 1);
-  assert.equal(result.hash, head.stdout.trim());
-  assert.equal(result.approved, false);
-  if (candidate.diff.length === 0) assert.equal(result.reason, "diff not visible");
-  assert.equal("commit" in result, false);
-  assert.equal("push" in result, false);
-  assert.equal("merge" in result, false);
-  const mode = statSync(result.resultFile).mode;
-  assert.equal(mode & 0o222, 0);
-  assert.throws(() => writeFileSync(result.resultFile, "edited"));
-  chmodSync(result.resultFile, 0o644);
+  const temp = mkdtempSync(join(tmpdir(), "freeze-private-"));
+  try {
+    const head = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" });
+    const candidate = readCandidate();
+    assert.equal(candidate.hash, head.stdout.trim());
+    const run = spawnSync(process.execPath, ["src/freeze/cli.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, TMPDIR: temp },
+    });
+    const result = JSON.parse(run.stdout);
+    assert.equal(run.status, 1);
+    assert.equal(result.hash, head.stdout.trim());
+    assert.equal(result.approved, false);
+    if (candidate.diff.length === 0) assert.equal(result.reason, "diff not visible");
+    assert.equal("commit" in result, false);
+    assert.equal("push" in result, false);
+    assert.equal("merge" in result, false);
+    const mode = statSync(result.resultFile).mode;
+    assert.equal(mode & 0o222, 0);
+    assert.throws(() => writeFileSync(result.resultFile, "edited"));
+  } finally {
+    rmSync(temp, { recursive: true, force: true });
+  }
 });
 
 test("risk stays on the candidate instead of defaulting to low", () => {
@@ -37,16 +44,24 @@ test("risk stays on the candidate instead of defaulting to low", () => {
 });
 
 test("unreadable checks refuse without approving", () => {
+  const temp = mkdtempSync(join(tmpdir(), "freeze-private-"));
   const dir = mkdtempSync(join(tmpdir(), "freeze-checks-"));
-  const checks = join(dir, "checks.json");
-  writeFileSync(checks, "{");
-  const run = spawnSync(process.execPath, ["src/freeze/cli.mjs", checks], { encoding: "utf8" });
-  const result = JSON.parse(run.stdout);
-  assert.equal(run.status, 1);
-  assert.equal(result.approved, false);
-  assert.equal(result.reason, "input not readable");
-  assert.equal(statSync(result.resultFile).mode & 0o222, 0);
-  chmodSync(result.resultFile, 0o644);
+  try {
+    const checks = join(dir, "checks.json");
+    writeFileSync(checks, "{");
+    const run = spawnSync(process.execPath, ["src/freeze/cli.mjs", checks], {
+      encoding: "utf8",
+      env: { ...process.env, TMPDIR: temp },
+    });
+    const result = JSON.parse(run.stdout);
+    assert.equal(run.status, 1);
+    assert.equal(result.approved, false);
+    assert.equal(result.reason, "input not readable");
+    assert.equal(statSync(result.resultFile).mode & 0o222, 0);
+  } finally {
+    rmSync(temp, { recursive: true, force: true });
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("the cli reloads a receipt and does not follow a linked one", () => {
@@ -64,19 +79,28 @@ test("the cli reloads a receipt and does not follow a linked one", () => {
     git(["init"]);
     git(["commit", "--allow-empty", "-m", "init"]);
     const hash = git(["rev-parse", "HEAD"]).toString().trim();
+    const repo = git(["rev-parse", "--show-toplevel"]).toString().trim();
     writeFileSync(join(dir, "pay.js"), "x\n");
-    receipt = join(tmpdir(), "ai-skill-reviewer-freeze", `${hash}.json`);
-    writeFileSync(receipt, `${JSON.stringify({ hash, candidateId: "different", approved: false })}\n`);
+    receipt = receiptFile(hash, repo);
+    const kept = { hash, repo, candidateId: "kept", approved: false, rollup: "FAIL", correction: true };
+    writeFileSync(receipt, `${JSON.stringify(kept)}\n`);
     const cli = join(process.cwd(), "src/freeze/cli.mjs");
+    const bad = join(dir, "checks.json");
+    writeFileSync(bad, "{");
+    const preserved = spawnSync(process.execPath, [cli, bad], { cwd: dir, encoding: "utf8" });
+    assert.equal(JSON.parse(preserved.stdout).reason, "input not readable");
+    assert.equal(JSON.parse(readFileSync(receipt, "utf8")).candidateId, "kept");
+    writeFileSync(receipt, `${JSON.stringify({ hash, repo, candidateId: "different", approved: false, rollup: "FAIL" })}\n`);
     const run = spawnSync(process.execPath, [cli], { cwd: dir, encoding: "utf8" });
     const result = JSON.parse(run.stdout);
     assert.equal(result.reason, "candidate changed");
     assert.equal(result.approved, false);
+    assert.equal(JSON.parse(readFileSync(receipt, "utf8")).candidateId, "different");
     const target = join(dir, "secret.txt");
     writeFileSync(target, "secret");
     unlinkSync(receipt);
     symlinkSync(target, receipt);
-    const linked = recallPrevious(hash);
+    const linked = recallPrevious(hash, repo);
     assert.equal(linked.error instanceof Error, true);
     const blocked = spawnSync(process.execPath, [cli], { cwd: dir, encoding: "utf8" });
     const refusal = JSON.parse(blocked.stdout);
