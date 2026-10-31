@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { chmodSync, statSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdtempSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 import { decide } from "../src/freeze/cli.mjs";
 import { readCandidate } from "../src/freeze/read.mjs";
@@ -21,6 +23,29 @@ test("the freeze script cites the real HEAD and does not approve from this tree"
   const mode = statSync(result.resultFile).mode;
   assert.equal(mode & 0o222, 0);
   assert.throws(() => writeFileSync(result.resultFile, "edited"));
+  chmodSync(result.resultFile, 0o644);
+});
+
+test("risk stays on the candidate instead of defaulting to low", () => {
+  const diff = "diff --git a/src/pay.js b/src/pay.js\n";
+  const checks = [{ id: "build", state: "PASS", evidence: "exit 0", reason: null }];
+  assert.equal(decide({ hash: "abc", diff }, { checks }).depth, "full");
+  assert.equal(
+    decide({ hash: "abc", diff, risk: "low", assessment: "ok", budgetHit: false }, { checks }).depth,
+    "structural",
+  );
+});
+
+test("unreadable checks refuse without approving", () => {
+  const dir = mkdtempSync(join(tmpdir(), "freeze-checks-"));
+  const checks = join(dir, "checks.json");
+  writeFileSync(checks, "{");
+  const run = spawnSync(process.execPath, ["src/freeze/cli.mjs", checks], { encoding: "utf8" });
+  const result = JSON.parse(run.stdout);
+  assert.equal(run.status, 1);
+  assert.equal(result.approved, false);
+  assert.equal(result.reason, "input not readable");
+  assert.equal(statSync(result.resultFile).mode & 0o222, 0);
   chmodSync(result.resultFile, 0o644);
 });
 
