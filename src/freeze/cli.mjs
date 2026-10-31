@@ -119,13 +119,26 @@ if (isEntry) {
   const candidate = readCandidate();
   const checksFile = process.argv[2] ? readJson(process.argv[2]) : { value: [] };
   const candidateId = candidate.diff ? candidateIdFor(candidate.hash, candidate.diff) : "";
+  const onDisk = recallPrevious(candidate.hash, candidate.repo, candidateId);
+  if (onDisk.value?.correction === true) {
+    emit({
+      ...onDisk.value,
+      hash: candidate.hash,
+      repo: candidate.repo,
+      approved: false,
+      reason: "correction already used",
+      correction: true,
+    });
+  }
   const supplied = process.argv[3] ? readJson(process.argv[3]) : null;
-  const suppliedEntry = supplied?.value?.entries
-    ? { value: candidateId ? supplied.value.entries[candidateId] ?? null : null }
+  const suppliedRecord = supplied?.value?.entries
+    ? supplied.value.entries[candidateId]
     : supplied?.value?.candidateId
-      ? supplied
+      ? supplied.value
       : null;
-  const previousFile = supplied?.error ? supplied : (suppliedEntry ?? recallPrevious(candidate.hash, candidate.repo, candidateId));
+  const previousFile = supplied?.error || onDisk.error
+    ? (supplied?.error ? supplied : onDisk)
+    : { value: suppliedRecord ?? onDisk.value ?? null };
   if (checksFile.error || supplied?.error || !Array.isArray(checksFile.value)) {
     emit({ hash: candidate.hash, repo: candidate.repo, approved: false, reason: "input not readable" });
   }

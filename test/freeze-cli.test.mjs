@@ -117,6 +117,11 @@ test("the cli reloads a receipt and does not follow a linked one", () => {
     const replay = JSON.parse(spawnSync(process.execPath, [cli, checks, receipt], { cwd: dir, encoding: "utf8" }).stdout);
     assert.equal(replay.approved, false);
     assert.equal(replay.reason, "correction already used");
+    const forged = join(tmpdir(), `freeze-old-${hash}.json`);
+    writeFileSync(forged, `${JSON.stringify({ entries: { [firstId]: { hash, candidateId: firstId, approved: false, rollup: "FAIL" } } })}\n`);
+    const bypass = JSON.parse(spawnSync(process.execPath, [cli, checks, forged], { cwd: dir, encoding: "utf8" }).stdout);
+    assert.equal(bypass.approved, false);
+    assert.equal(bypass.reason, "correction already used");
     assert.equal(JSON.parse(readFileSync(receipt, "utf8")).entries[firstId].correction, true);
     const target = join(dir, "secret.txt");
     writeFileSync(target, "secret");
