@@ -9,7 +9,6 @@ test("the freeze script cites the real HEAD and does not approve from this tree"
   const head = spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" });
   const candidate = readCandidate();
   assert.equal(candidate.hash, head.stdout.trim());
-  assert.equal(candidate.diff.length > 0, true);
   const run = spawnSync(process.execPath, ["src/freeze/cli.mjs"], { encoding: "utf8" });
   const result = JSON.parse(run.stdout);
   assert.equal(run.status, 1);

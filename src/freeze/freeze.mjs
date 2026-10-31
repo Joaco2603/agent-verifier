@@ -28,7 +28,7 @@ export function freezeCandidate(input) {
   const { hash, diff, previous = null } = input;
   const checks = input.checks ?? [];
   if (!diffVisible(hash, diff)) {
-    return { approved: false, reason: "diff not visible" };
+    return { approved: false, reason: "diff not visible", ...(hash ? { hash } : {}) };
   }
   const candidateId = candidateIdFor(hash, diff);
   if (contractsChanged(diff)) {

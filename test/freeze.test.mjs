@@ -59,8 +59,10 @@ test("missing diff is not approved", () => {
   const missingHash = freezeCandidate(input({ hash: "" }));
   assert.equal(missingDiff.approved, false);
   assert.equal(missingDiff.reason, "diff not visible");
+  assert.equal(missingDiff.hash, "abc123");
   assert.equal(missingHash.approved, false);
   assert.equal(missingHash.reason, "diff not visible");
+  assert.equal(missingHash.hash, undefined);
 });
 
 test("a contract diff is not approved", () => {
