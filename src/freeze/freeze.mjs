@@ -19,7 +19,7 @@ function depthOf(input, checks) {
   return structural ? "structural" : "full";
 }
 
-function candidateIdFor(hash, diff) {
+export function candidateIdFor(hash, diff) {
   const digest = createHash("sha256").update(diff).digest("hex");
   return `${hash}:${digest}`;
 }
