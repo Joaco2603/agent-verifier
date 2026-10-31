@@ -80,7 +80,9 @@ function emit(body, { write = true } = {}) {
     process.exit(1);
   }
   const entries = existing.entries;
-  if (body.candidateId && (!entries[body.candidateId] || !keepsLedger(entries[body.candidateId]) || keepsLedger(body))) {
+  const slot = body.candidateId ? entries[body.candidateId] : null;
+  const locked = slot?.correction === true && body.correction !== true;
+  if (!locked && body.candidateId && (!slot || !keepsLedger(slot) || keepsLedger(body))) {
     entries[body.candidateId] = withoutFile(body);
   } else if (!body.candidateId && Object.keys(entries).length === 0) {
     // A first refusal still leaves a readable receipt.
@@ -118,7 +120,12 @@ if (isEntry) {
   const checksFile = process.argv[2] ? readJson(process.argv[2]) : { value: [] };
   const candidateId = candidate.diff ? candidateIdFor(candidate.hash, candidate.diff) : "";
   const supplied = process.argv[3] ? readJson(process.argv[3]) : null;
-  const previousFile = supplied ?? recallPrevious(candidate.hash, candidate.repo, candidateId);
+  const suppliedEntry = supplied?.value?.entries
+    ? { value: candidateId ? supplied.value.entries[candidateId] ?? null : null }
+    : supplied?.value?.candidateId
+      ? supplied
+      : null;
+  const previousFile = supplied?.error ? supplied : (suppliedEntry ?? recallPrevious(candidate.hash, candidate.repo, candidateId));
   if (checksFile.error || supplied?.error || !Array.isArray(checksFile.value)) {
     emit({ hash: candidate.hash, repo: candidate.repo, approved: false, reason: "input not readable" });
   }

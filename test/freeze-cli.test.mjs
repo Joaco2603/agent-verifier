@@ -114,6 +114,10 @@ test("the cli reloads a receipt and does not follow a linked one", () => {
     const back = JSON.parse(spawnSync(process.execPath, [cli, checks], { cwd: dir, encoding: "utf8" }).stdout);
     assert.equal(back.approved, false);
     assert.equal(back.reason, "correction already used");
+    const replay = JSON.parse(spawnSync(process.execPath, [cli, checks, receipt], { cwd: dir, encoding: "utf8" }).stdout);
+    assert.equal(replay.approved, false);
+    assert.equal(replay.reason, "correction already used");
+    assert.equal(JSON.parse(readFileSync(receipt, "utf8")).entries[firstId].correction, true);
     const target = join(dir, "secret.txt");
     writeFileSync(target, "secret");
     unlinkSync(receipt);
