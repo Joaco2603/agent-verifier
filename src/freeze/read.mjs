@@ -5,12 +5,12 @@ import { join } from "node:path";
 
 const maxBuffer = 32 * 1024 * 1024;
 
-function captureDiff(args) {
+function captureDiff(args, cwd) {
   const dir = mkdtempSync(join(tmpdir(), "freeze-diff-"));
   const file = join(dir, "diff");
   const fd = openSync(file, "w");
   try {
-    const result = spawnSync("git", args, { stdio: ["ignore", fd, "pipe"], maxBuffer });
+    const result = spawnSync("git", args, { cwd, stdio: ["ignore", fd, "pipe"], maxBuffer });
     const stderr = result.stderr ? result.stderr.toString() : "";
     if (result.status !== 0 || result.error) {
       return { status: result.status, stdout: "", stderr, error: result.error };
@@ -22,10 +22,10 @@ function captureDiff(args) {
   }
 }
 
-function git(args, input) {
-  const command = ["-c", "diff.mnemonicPrefix=false", "-c", "color.ui=false", ...args];
-  if (args[0] === "diff") return captureDiff(command);
-  return spawnSync("git", command, { encoding: "utf8", input, maxBuffer });
+function git(args, input, cwd) {
+  const command = ["-c", "diff.mnemonicPrefix=false", "-c", "diff.relative=false", "-c", "color.ui=false", ...args];
+  if (args[0] === "diff") return captureDiff(command, cwd);
+  return spawnSync("git", command, { encoding: "utf8", input, maxBuffer, cwd });
 }
 
 function quotePath(path) {
@@ -74,10 +74,12 @@ function keptDiff(tracked, extras) {
 }
 
 export function readCandidate(run = git) {
-  const head = run(["rev-parse", "HEAD"]);
+  const root = run(["rev-parse", "--show-toplevel"]);
+  const cwd = root?.status === 0 ? root.stdout.trim() : undefined;
+  const head = run(["rev-parse", "HEAD"], undefined, cwd);
   const hash = head?.status === 0 ? head.stdout.trim() : "";
-  const tracked = run(["diff", "--no-ext-diff", "--no-color", "--default-prefix", "--full-index", "HEAD"]);
-  const status = run(["status", "--porcelain=v1", "-z", "-uall"]);
+  const tracked = run(["diff", "--no-ext-diff", "--no-color", "--default-prefix", "--full-index", "HEAD"], undefined, cwd);
+  const status = run(["status", "--porcelain=v1", "-z", "-uall"], undefined, cwd);
   if (!hash || failed(tracked) || failed(status)) {
     const error = [note(tracked), note(status)].filter(Boolean).join("\n");
     return { hash, diff: "", ...(error ? { error } : {}) };
@@ -88,12 +90,12 @@ export function readCandidate(run = git) {
   }
   const extras = [];
   if (paths.length > 0) {
-    const blob = run(["hash-object", "--stdin-paths"], `${paths.join("\n")}\n`);
+    const blob = run(["hash-object", "--stdin-paths"], `${paths.join("\n")}\n`, cwd);
     const ids = (blob?.stdout ?? "").split("\n").filter((line) => line.length > 0);
     if (failed(blob) || ids.length !== paths.length) {
       return { hash, diff: "", error: note(blob) || "cannot hash untracked files" };
     }
     paths.forEach((path, index) => extras.push(stub(path, ids[index])));
   }
-  return { hash, diff: keptDiff(tracked.stdout, extras) };
+  return { hash, repo: cwd || "", diff: keptDiff(tracked.stdout, extras) };
 }

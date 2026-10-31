@@ -76,6 +76,21 @@ test("untracked files are hashed in one call and trailing diff bytes stay", () =
   assert.equal(candidate.diff.includes("index 0000000..bbb"), true);
 });
 
+test("git commands run from the repository root", () => {
+  const calls = [];
+  const candidate = readCandidate((args, input, cwd) => {
+    calls.push({ command: args[0], cwd });
+    if (args[1] === "--show-toplevel") return { status: 0, stdout: "/repo\n", stderr: "" };
+    if (args[0] === "rev-parse") return head;
+    if (args[0] === "diff") return { status: 0, stdout: "", stderr: "" };
+    if (args[0] === "status") return { status: 0, stdout: "", stderr: "" };
+    throw new Error(args.join(" "));
+  });
+  assert.equal(candidate.repo, "/repo");
+  assert.equal(candidate.hash, "abc");
+  assert.equal(calls.filter((call) => call.command !== "rev-parse").every((call) => call.cwd === "/repo"), true);
+});
+
 test("a failed diff keeps HEAD and the git error", () => {
   const candidate = readCandidate(fake({
     "rev-parse": head,
