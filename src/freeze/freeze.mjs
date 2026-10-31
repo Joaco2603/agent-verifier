@@ -28,9 +28,12 @@ export function freezeCandidate(input) {
   const { hash, diff, previous = null } = input;
   const checks = input.checks ?? [];
   if (!diffVisible(hash, diff)) {
-    return { approved: false, reason: "diff not visible", ...(hash ? { hash } : {}) };
+    const refusal = { approved: false, reason: "diff not visible", ...(hash ? { hash } : {}) };
+    if (input.error) refusal.error = input.error;
+    return refusal;
   }
   const candidateId = candidateIdFor(hash, diff);
+  const prior = previous?.candidateId && previous.reason !== "diff not visible" ? previous : null;
   if (contractsChanged(diff)) {
     return {
       hash,
@@ -39,10 +42,10 @@ export function freezeCandidate(input) {
       reason: "contract edited",
     };
   }
-  if (previous && previous.candidateId !== candidateId) {
+  if (prior && prior.candidateId !== candidateId) {
     return { hash, candidateId, approved: false, reason: "candidate changed" };
   }
-  if (previous?.correction === true) {
+  if (prior?.correction === true) {
     const classified = classify(checks);
     return {
       hash,
@@ -55,7 +58,7 @@ export function freezeCandidate(input) {
   }
   const classified = classify(checks);
   const critical = criticalFailure(checks);
-  const correction = Boolean(previous && previous.approved === false);
+  const correction = Boolean(prior && prior.approved === false);
   const approved = !critical && classified.rollup !== "UNKNOWN" && classified.rollup !== "NOT_APPLICABLE";
   const result = {
     hash,

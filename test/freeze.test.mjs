@@ -72,6 +72,27 @@ test("a contract diff is not approved", () => {
   assert.equal(result.hash, "abc123");
 });
 
+test("an invisible refusal does not consume the correction", () => {
+  const invisible = freezeCandidate(input({ diff: "" }));
+  const next = freezeCandidate(input({ previous: invisible }));
+  assert.equal(next.approved, true);
+  assert.equal(next.correction, undefined);
+  assert.equal(next.reason, undefined);
+  const stale = freezeCandidate(input({
+    previous: { hash: "abc123", approved: false, reason: "diff not visible", candidateId: "abc123:stale" },
+  }));
+  assert.equal(stale.approved, true);
+  assert.equal(stale.correction, undefined);
+});
+
+test("a git error stays on the invisible refusal", () => {
+  const result = freezeCandidate(input({ diff: "", error: "too big" }));
+  assert.equal(result.approved, false);
+  assert.equal(result.reason, "diff not visible");
+  assert.equal(result.error, "too big");
+  assert.equal(result.hash, "abc123");
+});
+
 test("a second attempt with a different diff does not count", () => {
   const first = freezeCandidate(input({
     checks: [{ id: "build", state: "FAIL", evidence: "exit 1", reason: null }],

@@ -14,6 +14,7 @@ test("the freeze script cites the real HEAD and does not approve from this tree"
   assert.equal(run.status, 1);
   assert.equal(result.hash, head.stdout.trim());
   assert.equal(result.approved, false);
+  if (candidate.diff.length === 0) assert.equal(result.reason, "diff not visible");
   assert.equal("commit" in result, false);
   assert.equal("push" in result, false);
   assert.equal("merge" in result, false);
