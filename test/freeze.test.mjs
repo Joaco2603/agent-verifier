@@ -111,6 +111,19 @@ test("a non-severe failure stays visible and does not block the freeze", () => {
   assert.equal(result.approved, true);
 });
 
+test("an empty check list does not spend the correction", () => {
+  const failed = freezeCandidate(input({
+    checks: [{ id: "auth", state: "FAIL", evidence: "reproduced", reason: null, critical: true }],
+  }));
+  const empty = freezeCandidate(input({ checks: [], previous: failed }));
+  const again = freezeCandidate(input({ previous: empty }));
+  assert.equal(empty.approved, false);
+  assert.equal(empty.rollup, "NOT_APPLICABLE");
+  assert.equal(empty.correction, undefined);
+  assert.equal(again.approved, true);
+  assert.equal(again.correction, undefined);
+});
+
 test("an inapplicable result does not arm the correction", () => {
   const first = freezeCandidate(input());
   const next = freezeCandidate(input({

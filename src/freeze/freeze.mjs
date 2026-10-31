@@ -61,7 +61,8 @@ export function freezeCandidate(input) {
   }
   const classified = classify(checks);
   const critical = criticalFailure(checks);
-  const correction = Boolean(prior && prior.approved === false && prior.rollup !== "NOT_APPLICABLE");
+  const measured = classified.rollup !== "NOT_APPLICABLE";
+  const correction = Boolean(prior && prior.approved === false && prior.rollup !== "NOT_APPLICABLE" && measured);
   const approved = !critical && classified.rollup !== "UNKNOWN" && classified.rollup !== "NOT_APPLICABLE";
   const result = {
     hash,
