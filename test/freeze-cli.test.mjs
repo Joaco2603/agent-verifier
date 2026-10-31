@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
-import { chmodSync, mkdtempSync, statSync, writeFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { chmodSync, mkdtempSync, readFileSync, rmSync, statSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { decide } from "../src/freeze/cli.mjs";
+import { decide, recallPrevious } from "../src/freeze/cli.mjs";
 import { readCandidate } from "../src/freeze/read.mjs";
 
 test("the freeze script cites the real HEAD and does not approve from this tree", () => {
@@ -47,6 +47,51 @@ test("unreadable checks refuse without approving", () => {
   assert.equal(result.reason, "input not readable");
   assert.equal(statSync(result.resultFile).mode & 0o222, 0);
   chmodSync(result.resultFile, 0o644);
+});
+
+test("the cli reloads a receipt and does not follow a linked one", () => {
+  const dir = mkdtempSync(join(process.cwd(), ".tmp-freeze-"));
+  const env = {
+    ...process.env,
+    GIT_AUTHOR_NAME: "t",
+    GIT_AUTHOR_EMAIL: "t@example.com",
+    GIT_COMMITTER_NAME: "t",
+    GIT_COMMITTER_EMAIL: "t@example.com",
+  };
+  const git = (args) => execFileSync("git", args, { cwd: dir, env });
+  let receipt = "";
+  try {
+    git(["init"]);
+    git(["commit", "--allow-empty", "-m", "init"]);
+    const hash = git(["rev-parse", "HEAD"]).toString().trim();
+    writeFileSync(join(dir, "pay.js"), "x\n");
+    receipt = join(tmpdir(), "ai-skill-reviewer-freeze", `${hash}.json`);
+    writeFileSync(receipt, `${JSON.stringify({ hash, candidateId: "different", approved: false })}\n`);
+    const cli = join(process.cwd(), "src/freeze/cli.mjs");
+    const run = spawnSync(process.execPath, [cli], { cwd: dir, encoding: "utf8" });
+    const result = JSON.parse(run.stdout);
+    assert.equal(result.reason, "candidate changed");
+    assert.equal(result.approved, false);
+    const target = join(dir, "secret.txt");
+    writeFileSync(target, "secret");
+    unlinkSync(receipt);
+    symlinkSync(target, receipt);
+    const linked = recallPrevious(hash);
+    assert.equal(linked.error instanceof Error, true);
+    const blocked = spawnSync(process.execPath, [cli], { cwd: dir, encoding: "utf8" });
+    const refusal = JSON.parse(blocked.stdout);
+    assert.equal(refusal.reason, "receipt not writable");
+    assert.equal(readFileSync(target, "utf8"), "secret");
+  } finally {
+    if (receipt) {
+      try {
+        unlinkSync(receipt);
+      } catch {
+        // The receipt was already removed.
+      }
+    }
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("a second pass on a different diff does not count as the one correction", () => {
