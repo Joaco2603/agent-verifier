@@ -33,7 +33,9 @@ export function freezeCandidate(input) {
     return refusal;
   }
   const candidateId = candidateIdFor(hash, diff);
-  const prior = previous?.candidateId && previous.reason !== "diff not visible" ? previous : null;
+  const prior = previous?.candidateId && previous.reason !== "diff not visible" && previous.reason !== "candidate changed"
+    ? previous
+    : null;
   if (contractsChanged(diff)) {
     return {
       hash,
@@ -54,11 +56,12 @@ export function freezeCandidate(input) {
       rollup: classified.rollup,
       approved: false,
       reason: "correction already used",
+      correction: true,
     };
   }
   const classified = classify(checks);
   const critical = criticalFailure(checks);
-  const correction = Boolean(prior && prior.approved === false);
+  const correction = Boolean(prior && prior.approved === false && prior.rollup !== "NOT_APPLICABLE");
   const approved = !critical && classified.rollup !== "UNKNOWN" && classified.rollup !== "NOT_APPLICABLE";
   const result = {
     hash,

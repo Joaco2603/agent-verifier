@@ -111,6 +111,40 @@ test("a non-severe failure stays visible and does not block the freeze", () => {
   assert.equal(result.approved, true);
 });
 
+test("an inapplicable result does not arm the correction", () => {
+  const first = freezeCandidate(input());
+  const next = freezeCandidate(input({
+    previous: { ...first, approved: false, rollup: "NOT_APPLICABLE" },
+  }));
+  assert.equal(next.correction, undefined);
+  assert.equal(next.approved, true);
+});
+
+test("a changed candidate is judged on its own", () => {
+  const failed = freezeCandidate(input({
+    checks: [{ id: "auth", state: "FAIL", evidence: "reproduced", reason: null, critical: true }],
+  }));
+  const changed = freezeCandidate(input({ diff: diffB, previous: failed }));
+  const judged = freezeCandidate(input({ diff: diffB, previous: changed }));
+  assert.equal(changed.reason, "candidate changed");
+  assert.equal(judged.correction, undefined);
+  assert.equal(judged.approved, true);
+  assert.equal(judged.candidateId.startsWith("abc123:"), true);
+});
+
+test("a spent correction stays spent when that result is reused", () => {
+  const failed = freezeCandidate(input({
+    checks: [{ id: "auth", state: "FAIL", evidence: "reproduced", reason: null, critical: true }],
+  }));
+  const corrected = freezeCandidate(input({ previous: failed }));
+  const third = freezeCandidate(input({ previous: corrected }));
+  const fourth = freezeCandidate(input({ previous: third }));
+  assert.equal(third.correction, true);
+  assert.equal(fourth.approved, false);
+  assert.equal(fourth.reason, "correction already used");
+  assert.equal(fourth.correction, true);
+});
+
 test("one correction is allowed and a third call is rejected", () => {
   const failed = freezeCandidate(input({
     checks: [{ id: "auth", state: "FAIL", evidence: "reproduced", reason: null, critical: true }],
