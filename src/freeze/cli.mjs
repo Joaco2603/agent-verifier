@@ -103,6 +103,9 @@ if (isEntry) {
   let result;
   try {
     result = decide(candidate, { checks: checksFile.value, previous: previousFile.value });
+    if (result.reason === "candidate changed") {
+      result = decide(candidate, { checks: checksFile.value, previous: result });
+    }
   } catch (error) {
     emit({
       hash: candidate.hash,
