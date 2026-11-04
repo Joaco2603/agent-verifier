@@ -7,7 +7,7 @@ approval:
   status: approved
   by: experimenter
 target:
-  operation: span
+  operation: delivery_span
   inputs:
     - calendar
     - weekend

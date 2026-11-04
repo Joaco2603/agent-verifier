@@ -1,5 +1,5 @@
 id: RF-18
-name: A tie keeps the leader
+name: A tie keeps the ranking leader
 priority: normal
 gate: report
 revision: 1
@@ -7,7 +7,7 @@ approval:
   status: approved
   by: experimenter
 target:
-  operation: score
+  operation: ranking
   inputs:
     - leader
     - challenger

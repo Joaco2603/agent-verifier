@@ -1,4 +1,7 @@
+import { recordBenchmark } from "../benchmark/record.mjs";
+import { contractParts, pert, pointsForParts } from "../plan/pert.mjs";
 import { contractFromFile } from "./files.mjs";
+import { runSeeded } from "./seeded.mjs";
 
 function caseFailed(task, fn) {
   const contract = contractFromFile(task).contract;
@@ -38,4 +41,31 @@ export function measureAgent(tasks, fns, agentTestsPass) {
     needsHuman: rows.filter((row) => !row.contractFailed).map((row) => row.id),
     runner: false,
   };
+}
+
+export function judgeCorpus(tasks, fns, agentTestsPass) {
+  const seeded = runSeeded(tasks);
+  const weakById = new Map(seeded.rows.map((row) => [row.id, row.weak === true]));
+  const rows = tasks.map((task, index) => {
+    const contract = contractFromFile(task).contract;
+    const failed = caseFailed(task, fns[index]);
+    const estimate = pert(pointsForParts(contractParts(contract)));
+    return {
+      defectId: contract.id,
+      contractId: contract.id,
+      revision: contract.revision ?? 1,
+      gate: failed ? "FAIL" : "PASS",
+      agentTests: agentTestsPass ? "PASS" : "FAIL",
+      weak: weakById.get(contract.id) === true,
+      requirement: failed ? "failed" : "passed",
+      raw: failed ? "approved observable missed" : "approved observable matched",
+      falseAcceptJudged: true,
+      falseAccept: false,
+      approvalMinutes: estimate.expected,
+    };
+  });
+  return recordBenchmark({
+    rows,
+    explanation: "False accepts were judged against the approved observables. Approval minutes are the PERT estimate.",
+  });
 }

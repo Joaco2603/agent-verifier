@@ -1,5 +1,5 @@
 id: RF-04
-name: At most three retries
+name: At most three payment retries
 priority: normal
 gate: report
 revision: 1
@@ -7,7 +7,7 @@ approval:
   status: approved
   by: experimenter
 target:
-  operation: retry
+  operation: payment_retry
   inputs:
     - requested
 observables:

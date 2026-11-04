@@ -1,1 +1,1 @@
-Return no rows when the filter matches nothing.
+Return no products when the filter matches nothing.

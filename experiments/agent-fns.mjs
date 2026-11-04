@@ -3,7 +3,7 @@ function allowDiscount({ price, percent }) {
   return { allowed: true, price: price * (1 - percent / 100) };
 }
 
-function transfer({ balance, amount }) {
+function purchase({ balance, amount }) {
   if (amount > balance) return { accepted: false, balance };
   return { accepted: true, balance: balance - amount };
 }
@@ -12,12 +12,12 @@ function roundHalfUp({ value }) {
   return { value: Math.floor(value + 0.5) };
 }
 
-function retry({ attempt }) {
+function paymentRetry({ attempt }) {
   return { proceed: attempt <= 3 };
 }
 
-function filterRows({ rows, field, value }) {
-  return { rows: rows.filter((row) => row[field] === value) };
+function filterProducts({ products, field, value }) {
+  return { products: products.filter((product) => product[field] === value) };
 }
 
 function userOrders({ userId, orders }) {
@@ -28,7 +28,7 @@ function charge({ amount }) {
   return { charge: Math.max(1, amount * 0.02) };
 }
 
-function businessDays({ start, end }) {
+function deliveryBusinessDays({ start, end }) {
   const from = Date.parse(`${start}T00:00:00Z`);
   const to = Date.parse(`${end}T00:00:00Z`);
   let days = 0;
@@ -58,9 +58,9 @@ function refund({ dailyRate, totalDays, usedDays }) {
   return { refund: dailyRate * (totalDays - usedDays) };
 }
 
-function byName({ rows }) {
-  const sorted = rows.slice().sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
-  return { rows: sorted };
+function productsByName({ products }) {
+  const sorted = products.slice().sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+  return { products: sorted };
 }
 
 function email({ emails, email }) {
@@ -76,7 +76,7 @@ function totalWithTax({ subtotal, tax }) {
   return { total: subtotal + tax };
 }
 
-function childFare({ age, price }) {
+function childTicketPrice({ age, price }) {
   return { price: age < 12 ? price / 2 : price };
 }
 
@@ -96,22 +96,22 @@ function dailyLimit({ spent, limit }) {
 
 export const fns = [
   allowDiscount,
-  transfer,
+  purchase,
   roundHalfUp,
-  retry,
-  filterRows,
+  paymentRetry,
+  filterProducts,
   userOrders,
   charge,
-  businessDays,
+  deliveryBusinessDays,
   password,
   sell,
   coupon,
   refund,
-  byName,
+  productsByName,
   email,
   timeout,
   totalWithTax,
-  childFare,
+  childTicketPrice,
   leader,
   quantity,
   dailyLimit,

@@ -1,1 +1,1 @@
-Count only business days.
+Delivery estimates count only business days.

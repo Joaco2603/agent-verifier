@@ -36,6 +36,7 @@ test("each task is one sentence file and one contract file", () => {
     assert.equal(git.status, 0);
     assert.equal(gitBlob(bytes), git.stdout.trim());
     const task = tasks.find((item) => item.contract.id === id);
+    assert.equal(sentence.trim(), task.sentence);
     assert.deepEqual(parse(bytes.toString("utf8")), task.contract);
   }
 });

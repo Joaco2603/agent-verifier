@@ -1,5 +1,5 @@
 id: RF-20
-name: The daily limit is inclusive
+name: The daily purchase limit is inclusive
 priority: normal
 gate: report
 revision: 1
@@ -7,7 +7,7 @@ approval:
   status: approved
   by: experimenter
 target:
-  operation: limit
+  operation: purchase_limit
   inputs:
     - used
     - limit

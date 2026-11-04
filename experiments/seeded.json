@@ -1,0 +1,22 @@
+{
+  "RF-01": "({ price }) => ({ total: price * 0.7 })",
+  "RF-02": "() => ({ status: \"ACCEPTED\", balance_unchanged: false, balance_after: -50 })",
+  "RF-03": "({ value }) => ({ rounded: Math.trunc(value) })",
+  "RF-04": "() => ({ attempts: 3 })",
+  "RF-05": "() => ({ count: null })",
+  "RF-06": "({ own, others }) => ({ visible: own + others })",
+  "RF-07": "({ price }) => ({ fee: price * 0.02 })",
+  "RF-08": "({ calendar }) => ({ days: calendar })",
+  "RF-09": "({ length }) => ({ accepted: length === 8, seen: 1 })",
+  "RF-10": "({ requested }) => ({ sold: requested })",
+  "RF-11": "({ first, second }) => ({ discount: first + second })",
+  "RF-12": "({ price }) => ({ refund: price })",
+  "RF-13": "() => ({ first: \"b\", seen: 1 })",
+  "RF-14": "() => ({ status: \"ACCEPTED\", seen: 1 })",
+  "RF-15": "() => ({ value: \"error\", seen: 1 })",
+  "RF-16": "({ price }) => ({ total: price })",
+  "RF-17": "() => ({ due: 0 })",
+  "RF-18": "() => ({ winner: \"challenger\", seen: 1 })",
+  "RF-19": "() => ({ status: \"ACCEPTED\", seen: 1 })",
+  "RF-20": "() => ({ allowed: false, seen: 1 })"
+}

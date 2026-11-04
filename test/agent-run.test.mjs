@@ -4,7 +4,7 @@ import test from "node:test";
 import { fns } from "../experiments/agent-fns.mjs";
 import { tasks } from "../experiments/corpus.mjs";
 import { recordBenchmark } from "../src/benchmark/record.mjs";
-import { measureAgent } from "../src/experiment/agent-run.mjs";
+import { judgeCorpus, measureAgent } from "../src/experiment/agent-run.mjs";
 
 test("agent tests pass and contract misses stay unlabeled as false accepts", () => {
   const agent = spawnSync(process.execPath, ["--test", "test/agent-fns.test.mjs"], { encoding: "utf8" });
@@ -43,4 +43,16 @@ test("the live corpus withholds F and M, so the runner stays unbuilt", () => {
   assert.equal(report.coverage.failed, 20);
   assert.equal(report.coverage.passed, 0);
   assert.equal(report.coverage.vague, 0);
+});
+
+test("the judged corpus records zero false accepts and the PERT minutes", () => {
+  const agent = spawnSync(process.execPath, ["--test", "test/agent-fns.test.mjs"], { encoding: "utf8" });
+  assert.equal(agent.status, 0);
+  const report = judgeCorpus(tasks, fns, true);
+  assert.equal(report.runner.C, 20);
+  assert.equal(report.runner.F, 0);
+  assert.equal(report.runner.W, 0);
+  assert.equal(report.runner.M, 65 / 3);
+  assert.equal(report.runner.build, true);
+  assert.match(report.explanation, /PERT/);
 });

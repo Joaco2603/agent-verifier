@@ -1,5 +1,5 @@
 id: RF-15
-name: Timeout returns the fallback
+name: Payment timeout returns the fallback
 priority: normal
 gate: report
 revision: 1
@@ -7,7 +7,7 @@ approval:
   status: approved
   by: experimenter
 target:
-  operation: fetch
+  operation: payment_fetch
   inputs:
     - wait
 observables:

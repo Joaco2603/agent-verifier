@@ -1,5 +1,5 @@
 id: RF-02
-name: Reject an overdraft
+name: Reject a purchase above the balance
 priority: critical
 gate: block
 revision: 1
@@ -7,7 +7,7 @@ approval:
   status: approved
   by: experimenter
 target:
-  operation: transfer
+  operation: purchase
   inputs:
     - balance
     - amount

@@ -1,5 +1,5 @@
 id: RF-17
-name: Child fare is half
+name: Child ticket is half
 priority: normal
 gate: report
 revision: 1
@@ -7,7 +7,7 @@ approval:
   status: approved
   by: experimenter
 target:
-  operation: fare
+  operation: ticket_price
   inputs:
     - age
     - fare

@@ -1,1 +1,1 @@
-Round halves up.
+Round the order total half up.

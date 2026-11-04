@@ -1,5 +1,5 @@
 id: RF-03
-name: Round halves up
+name: Round the order total half up
 priority: normal
 gate: report
 revision: 1

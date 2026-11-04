@@ -1,1 +1,1 @@
-Reject a transfer above the available balance.
+Reject a purchase above the available balance.

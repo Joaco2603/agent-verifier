@@ -1,1 +1,1 @@
-Retry at most 3 times.
+Retry a payment at most 3 times.

@@ -7,26 +7,26 @@ test("allows discounts up to 30 percent", () => {
   assert.deepEqual(fns[0]({ price: 200, percent: 31 }), { allowed: false });
 });
 
-test("rejects a transfer above the balance", () => {
+test("rejects a purchase above the balance", () => {
   assert.deepEqual(fns[1]({ balance: 40, amount: 40 }), { accepted: true, balance: 0 });
   assert.deepEqual(fns[1]({ balance: 40, amount: 41 }), { accepted: false, balance: 40 });
 });
 
-test("rounds halves up", () => {
+test("rounds the order total half up", () => {
   assert.deepEqual(fns[2]({ value: 1.5 }), { value: 2 });
   assert.deepEqual(fns[2]({ value: 1.4 }), { value: 1 });
   assert.deepEqual(fns[2]({ value: -1.5 }), { value: -1 });
 });
 
-test("retries at most 3 times", () => {
+test("retries a payment at most 3 times", () => {
   assert.deepEqual(fns[3]({ attempt: 3 }), { proceed: true });
   assert.deepEqual(fns[3]({ attempt: 4 }), { proceed: false });
 });
 
-test("returns no rows when nothing matches", () => {
-  const rows = [{ id: 1, kind: "a" }];
-  assert.deepEqual(fns[4]({ rows, field: "kind", value: "z" }), { rows: [] });
-  assert.deepEqual(fns[4]({ rows, field: "kind", value: "a" }), { rows });
+test("returns no products when nothing matches", () => {
+  const products = [{ id: 1, kind: "a" }];
+  assert.deepEqual(fns[4]({ products, field: "kind", value: "z" }), { products: [] });
+  assert.deepEqual(fns[4]({ products, field: "kind", value: "a" }), { products });
 });
 
 test("users see their own orders", () => {
@@ -42,7 +42,7 @@ test("charges 2 percent with a minimum of 1", () => {
   assert.deepEqual(fns[6]({ amount: 250 }), { charge: 5 });
 });
 
-test("counts only business days", () => {
+test("counts only business days for delivery estimates", () => {
   assert.deepEqual(fns[7]({ start: "2026-10-23", end: "2026-10-26" }), { days: 2 });
 });
 
@@ -69,9 +69,9 @@ test("refunds only unused days", () => {
   assert.deepEqual(fns[11]({ dailyRate: 10, totalDays: 5, usedDays: 2 }), { refund: 30 });
 });
 
-test("keeps rows in name order", () => {
-  assert.deepEqual(fns[12]({ rows: [{ name: "cara" }, { name: "ada" }, { name: "bea" }] }), {
-    rows: [{ name: "ada" }, { name: "bea" }, { name: "cara" }],
+test("keeps products in name order", () => {
+  assert.deepEqual(fns[12]({ products: [{ name: "cara" }, { name: "ada" }, { name: "bea" }] }), {
+    products: [{ name: "ada" }, { name: "bea" }, { name: "cara" }],
   });
 });
 
@@ -83,7 +83,7 @@ test("rejects a duplicate email", () => {
   });
 });
 
-test("returns the fallback on timeout", () => {
+test("returns the fallback on payment timeout", () => {
   assert.deepEqual(fns[14]({ timedOut: true, value: "live", fallback: "cached" }), { value: "cached" });
   assert.deepEqual(fns[14]({ timedOut: false, value: "live", fallback: "cached" }), { value: "live" });
 });
@@ -92,12 +92,12 @@ test("shows the total with tax included", () => {
   assert.deepEqual(fns[15]({ subtotal: 80, tax: 8 }), { total: 88 });
 });
 
-test("children under 12 pay half", () => {
+test("child tickets under 12 pay half", () => {
   assert.deepEqual(fns[16]({ age: 11, price: 40 }), { price: 20 });
   assert.deepEqual(fns[16]({ age: 12, price: 40 }), { price: 40 });
 });
 
-test("a tie keeps the current leader", () => {
+test("a tie keeps the ranking leader", () => {
   assert.deepEqual(fns[17]({ leader: "ada", challenger: "bea", leaderScore: 5, challengerScore: 5 }), {
     leader: "ada",
   });
@@ -111,7 +111,7 @@ test("rejects a negative quantity", () => {
   assert.deepEqual(fns[18]({ quantity: 0 }), { accepted: true, quantity: 0 });
 });
 
-test("treats the daily limit as inclusive", () => {
+test("treats the daily purchase limit as inclusive", () => {
   assert.deepEqual(fns[19]({ spent: 100, limit: 100 }), { allowed: true });
   assert.deepEqual(fns[19]({ spent: 101, limit: 100 }), { allowed: false });
 });

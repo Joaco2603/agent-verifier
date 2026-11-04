@@ -1,1 +1,1 @@
-On timeout, return the fallback.
+On payment timeout, return the fallback.

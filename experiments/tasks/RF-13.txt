@@ -1,1 +1,1 @@
-Keep rows in name order.
+Keep products in name order.

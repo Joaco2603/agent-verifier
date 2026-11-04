@@ -4,10 +4,17 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "memory": "node src/memory/cli.mjs"
+    "build:corpus": "node experiments/build-corpus.mjs",
+    "memory": "node src/memory/cli.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
     "ajv": "^8.17.1",
-    "yaml": "^2.8.0"
+    "yaml": "^2.8.0",
+    "next": "^15.5.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   }
 }
