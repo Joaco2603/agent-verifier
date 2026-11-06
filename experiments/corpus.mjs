@@ -31,13 +31,13 @@ export const tasks = [
     seeded: seeded["RF-01"],
     contract: {
       "id": "RF-01",
-      "name": "Discount up to 30 percent",
+      "name": "Discount up to 30 percent (edited)",
       "priority": "normal",
       "gate": "report",
-      "revision": 1,
+      "revision": 2,
       "approval": {
         "status": "approved",
-        "by": "experimenter"
+        "by": "product-owner"
       },
       "target": {
         "operation": "discount",
