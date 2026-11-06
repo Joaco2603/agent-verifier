@@ -1,0 +1,50 @@
+.shell { max-width: 1100px; margin: 0 auto; padding: 28px 24px 64px; color: var(--ink); }
+.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.title { margin: 0; font-size: 24px; }
+.sub { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+.banner { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 16px; }
+.nameRow { display: flex; align-items: center; gap: 10px; }
+.input, .textarea { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font: inherit; font-size: 14px; }
+.textarea { width: 100%; min-height: 64px; resize: vertical; box-sizing: border-box; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.statValue { font-size: 24px; font-weight: 700; }
+.statLabel { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.bar { height: 6px; border-radius: 3px; background: var(--line); margin-top: 8px; overflow: hidden; }
+.barFill { height: 100%; background: var(--accent); }
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.tab { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 8px 16px; font: inherit; font-size: 14px; cursor: pointer; }
+.tabOn { background: var(--accent); border-color: var(--accent); color: #fff; }
+.layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }
+.list { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 8px; max-height: 70vh; overflow-y: auto; }
+.row { display: grid; grid-template-columns: 52px 1fr auto; gap: 8px; align-items: center; width: 100%; text-align: left; background: none; border: 0; color: var(--ink); padding: 8px; border-radius: 8px; font: inherit; font-size: 13px; cursor: pointer; }
+.rowOn { background: var(--accent-soft); }
+.rowId { font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 12px; }
+.tag { font-size: 11px; border-radius: 999px; padding: 2px 8px; background: var(--surface-2); color: var(--muted); }
+.tagOk { background: var(--ok-soft); color: var(--ok); }
+.tagWarn { background: var(--warn-soft); color: var(--warn); }
+.tagBad { background: var(--bad-soft); color: var(--bad); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+.sentence { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+.id { font-family: var(--mono); color: var(--accent); font-size: 13px; font-weight: 700; }
+.section { margin-top: 18px; }
+.sectionTitle { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 6px; }
+.line { font-size: 14px; margin: 4px 0; }
+.mono { font-family: var(--mono); font-size: 13px; }
+.code { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-family: var(--mono); font-size: 12px; overflow-x: auto; white-space: pre; margin: 0; }
+.timer { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 10px 16px; font: inherit; font-size: 14px; cursor: pointer; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.good { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.bad { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.choices { display: grid; gap: 10px; margin-top: 10px; }
+.choice { text-align: left; border: 2px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 12px; padding: 12px 14px; font: inherit; cursor: pointer; }
+.choiceOn { border-color: var(--accent); background: var(--accent-soft); }
+.choiceTitle { font-weight: 700; font-size: 15px; }
+.choiceText { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.message { margin-top: 12px; font-size: 13px; color: var(--bad); }
+.ok { color: var(--ok); }
+.empty { color: var(--muted); padding: 24px; text-align: center; }

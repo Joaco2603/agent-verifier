@@ -1,0 +1,132 @@
+{
+  "label": "rerun on the current corpus",
+  "manualReview": false,
+  "corpus": {
+    "tasks": 20,
+    "contractFiles": 20,
+    "revisions": {
+      "RF-01": 2,
+      "RF-02": 1,
+      "RF-03": 1,
+      "RF-04": 1,
+      "RF-05": 1,
+      "RF-06": 1,
+      "RF-07": 1,
+      "RF-08": 1,
+      "RF-09": 1,
+      "RF-10": 1,
+      "RF-11": 1,
+      "RF-12": 1,
+      "RF-13": 1,
+      "RF-14": 1,
+      "RF-15": 1,
+      "RF-16": 1,
+      "RF-17": 1,
+      "RF-18": 1,
+      "RF-19": 1,
+      "RF-20": 1
+    }
+  },
+  "weakContracts": {
+    "W": 0,
+    "ids": [],
+    "limit": "The same author wrote the contract and the seeded bug, so W is a weak estimate. Agent runs and approval minutes are not recorded.",
+    "byReviewerCounterexamples": {
+      "W": 19,
+      "ids": [
+        "RF-01",
+        "RF-02",
+        "RF-03",
+        "RF-04",
+        "RF-06",
+        "RF-07",
+        "RF-08",
+        "RF-09",
+        "RF-10",
+        "RF-11",
+        "RF-12",
+        "RF-13",
+        "RF-14",
+        "RF-15",
+        "RF-16",
+        "RF-17",
+        "RF-18",
+        "RF-19",
+        "RF-20"
+      ],
+      "note": "A contract is weak here when a subagent reviewer wrote a wrong implementation that passes it. The Module A limit is at most 3."
+    }
+  },
+  "agentCatches": {
+    "original": {
+      "C": 20,
+      "needsHuman": 0
+    },
+    "corrected": {
+      "C": 0,
+      "needsHuman": 20
+    }
+  },
+  "runner": {
+    "correctedFunctions": {
+      "PASS": 20
+    },
+    "counterexamples": {
+      "total": 38,
+      "survive": 38,
+      "caught": 0
+    }
+  },
+  "reviewers": {
+    "kind": "subagent",
+    "agreement": "20/20",
+    "approvedByBoth": [
+      "RF-05"
+    ],
+    "medianSeconds": 6.7,
+    "note": "From docs/experiment/baseline-rubric.json. Subagent time is not human approval time."
+  },
+  "benchmark": {
+    "original": {
+      "runner": {
+        "label": "runner decision",
+        "C": 20,
+        "F": 0,
+        "W": 0,
+        "M": 21.666666666666668,
+        "build": true
+      },
+      "cost": {
+        "gap": "cost",
+        "definition": "verification time plus any price already logged"
+      }
+    },
+    "corrected": {
+      "runner": {
+        "label": "runner decision",
+        "C": 0,
+        "F": 0,
+        "W": 0,
+        "M": 21.666666666666668,
+        "build": false
+      },
+      "cost": {
+        "gap": "cost",
+        "definition": "verification time plus any price already logged"
+      }
+    }
+  },
+  "verificationMilliseconds": {
+    "method": "median of 5 runs, wall clock, this machine",
+    "seededDefects": 9.24,
+    "originalFunctionsAgainstContracts": 4.44,
+    "correctedFunctionsAgainstContracts": 4.19,
+    "runnerOnCorrectedFunctions": 0.02,
+    "counterexamples": 0.08
+  },
+  "gaps": [
+    "Price: no model was called in these runs, so price stays unknown, not zero.",
+    "Escape and false alarm: no later observation and no person has judged them.",
+    "Approval minutes: PERT estimates and subagent times only; no person was timed."
+  ]
+}
