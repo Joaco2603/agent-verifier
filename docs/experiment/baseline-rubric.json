@@ -1,0 +1,548 @@
+{
+  "reviewer": "subagent",
+  "human": false,
+  "rubric": "docs/experiment/review-rubric.md",
+  "reviewersPerTask": 2,
+  "agreement": "20/20",
+  "approvedByBoth": [
+    "RF-05"
+  ],
+  "rejectedByBoth": [
+    "RF-01",
+    "RF-02",
+    "RF-03",
+    "RF-04",
+    "RF-06",
+    "RF-07",
+    "RF-08",
+    "RF-09",
+    "RF-10",
+    "RF-11",
+    "RF-12",
+    "RF-13",
+    "RF-14",
+    "RF-15",
+    "RF-16",
+    "RF-17",
+    "RF-18",
+    "RF-19",
+    "RF-20"
+  ],
+  "changedVsV1": [
+    "RF-06"
+  ],
+  "medianSeconds": 6.7,
+  "minSeconds": 5,
+  "maxSeconds": 15.4,
+  "note": "Parallel run; per-subagent wall clock, not human approval time.",
+  "problems": [],
+  "rows": [
+    {
+      "id": "RF-01",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 7.2,
+        "keyRule": "Discount percent is capped at 30; anything above 30 is not allowed.",
+        "counterexample": "function discount(price, percent) { return Math.max(0, price * (1 - percent / 100)); }",
+        "reasons": [
+          "The only case is percent 10 -> total 90, which the counterexample satisfies.",
+          "The only property is total >= 0, which Math.max(0, ...) satisfies for any percent.",
+          "No precondition caps percent at 30 and no case exercises percent above 30, so a 50 percent or 100 percent discount is accepted despite the sentence."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.9,
+        "keyRule": "discount percent must be at most 30 (upper limit)",
+        "counterexample": "function discount(price, percent) { return Math.max(0, price * (1 - percent / 100)); }",
+        "reasons": [
+          "The only case is percent 10, which is below the limit, so it never exercises the 30% bound.",
+          "The percent precondition is only gte 0, with no upper bound, and the floor property only requires total >= 0; the counterexample (no cap, clamped at 0) satisfies both, so percent 50 or 100 is accepted though the sentence caps discounts at 30."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-02",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 11.8,
+        "keyRule": "Reject when amount > balance (strictly above available balance).",
+        "counterexample": "function purchase(balance, amount){ if (amount >= balance + 50) return {status:'REJECTED', balance_unchanged:true, balance_after:balance}; return {status:'ACCEPTED', balance_unchanged:false, balance_after:Math.max(0, balance-amount)}; }",
+        "reasons": [
+          "Only one case (balance 100, amount 150); the only property is balance_after >= 0.",
+          "The counterexample rejects only when amount exceeds balance by 50 or more, accepting overdrafts such as balance 100, amount 120, yet matches the case and clamps balance_after to >= 0 so the floor property still holds.",
+          "No case or property pins the boundary or any ACCEPTED/REJECTED outcome for smaller overages."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 15.4,
+        "keyRule": "Reject when amount is strictly greater than the available balance (amount > balance); a purchase at or below balance is not rejected.",
+        "counterexample": "function purchase(balance, amount){ return {status:'REJECTED', balance_unchanged:true, balance_after:balance}; }",
+        "reasons": [
+          "Always rejecting returns the expected values for the only case (100,150) and keeps balance_after >= 0, so it satisfies the floor property; likewise rejecting when amount >= balance passes.",
+          "No case requires ACCEPTED for an amount at or below the balance, so the 'above' boundary (strictly greater) is unpinned and the contract cannot distinguish over-rejecting implementations."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-03",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.7,
+        "keyRule": "Ties (x.5) round up; non-ties round to nearest",
+        "counterexample": "function round(value){ return Math.ceil(value); }",
+        "reasons": [
+          "Only case is 1.5 -> 2; Math.ceil returns 2 and is >= 0 so the floor property holds, yet 1.2 -> 2 breaks 'round'.",
+          "Banker's rounding (round half to even) also passes: 1.5 -> 2, but 2.5 -> 2 breaks 'half up'. No case distinguishes half-up from half-even."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.3,
+        "keyRule": "Ties (x.5) round up, not to even or elsewhere",
+        "counterexample": "function round(value){ const f=Math.floor(value), d=value-f; if(d===0.5) return f%2===0?f:f+1; return Math.round(value); }",
+        "reasons": [
+          "Only case is 1.5 -> 2, which round-half-to-even also yields; 2.5 would give 2 instead of 3 and no case or property detects it.",
+          "The floor property (min 0) is satisfied by any non-negative output."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-04",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.1,
+        "keyRule": "attempts is capped at 3 (min(requested, 3))",
+        "counterexample": "function payment_retry({requested}){ return {attempts: requested}; }",
+        "reasons": [
+          "The only case (requested=1 -> attempts=1) and the floor property (attempts >= 0) are satisfied by an uncapped implementation that returns requested, so the limit of 3 is never exercised.",
+          "Secondary: 'retry at most 3 times' could mean 3 retries (4 attempts) or 3 attempts; no case or limitation names the choice."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.5,
+        "keyRule": "at most 3 retries (upper cap of 3)",
+        "counterexample": "function payment_retry(requested){ return { attempts: requested }; }",
+        "reasons": [
+          "The only case (requested 1 -> attempts 1) and the floor property (attempts >= 0) are satisfied by an uncapped implementation that returns requested, so the limit of 3 is never exercised.",
+          "Hidden ambiguity: 'at most 3 retries' could mean 3 retries (4 attempts) or 3 attempts; the observable is 'attempts' and limitations does not name the choice."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-05",
+      "v1": "APPROVE",
+      "a": {
+        "verdict": "APPROVE",
+        "seconds": 6.5,
+        "keyRule": "When matches is 0 the filter returns no products (count 0).",
+        "counterexample": null,
+        "reasons": [
+          "The only input is matches, and the case none pins matches 0 to count 0, which is exactly the sentence's rule.",
+          "Any implementation that breaks the rule must return count > 0 for matches 0, which the case rejects; no counterexample exists.",
+          "Template parts (floor, gte 0, limitations) are not grounds for rejection."
+        ]
+      },
+      "b": {
+        "verdict": "APPROVE",
+        "seconds": 6.7,
+        "keyRule": "When the filter matches nothing (matches = 0), the result contains no products (count = 0).",
+        "counterexample": null,
+        "reasons": [
+          "The only rule is matches=0 -> count=0; the case 'none' pins exactly that, so any implementation returning nonzero there fails.",
+          "The sentence says nothing about matches>0, so no implementation can violate the rule while passing the case.",
+          "No contradiction or ambiguity between sentence, case and floor property."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-06",
+      "v1": "APPROVE",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.7,
+        "keyRule": "A user sees exactly their own orders (visible = own, excluding others').",
+        "counterexample": "function orders({own, others}) { return Math.min(own, 1); }",
+        "reasons": [
+          "The only case (own=1, others=4 -> visible=1) is satisfied by returning min(own,1), which drops own orders when own>1; the floor property (>=0) also holds.",
+          "No case pins visible to own for values other than 1, so the rule that all own orders are visible is not enforced."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 7.1,
+        "keyRule": "A user sees their own orders, and only their own (visible equals own, never including others' orders).",
+        "counterexample": "function orders({own, others}) { return Math.min(own, 1); }",
+        "reasons": [
+          "The only case (own=1, others=4 -> visible=1) is also satisfied by returning min(own,1), which drops own orders beyond one; the floor property only requires visible >= 0.",
+          "No case varies own above 1 or checks that all own orders are visible, so under-showing own orders passes.",
+          "An implementation returning own + others when own is 1... is excluded by the case, but one returning others > 0 ? 1 : own also passes while ignoring the real rule."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-07",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.6,
+        "keyRule": "fee = max(2% of price, 1): percentage above the minimum, floor of 1 below it",
+        "counterexample": "function fee(price){ return 1; }",
+        "reasons": [
+          "The only case (price 10 -> fee 1) lands on the minimum branch, so the 2% rule is never exercised.",
+          "The only property is fee >= 0, which a constant 1 satisfies; the 2% charge for large prices is unconstrained."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 5.8,
+        "keyRule": "fee = max(2% of price, 1): 2% rate applies above the minimum",
+        "counterexample": "function fee(price){ return 1; }",
+        "reasons": [
+          "The only case (price 10 -> fee 1) is the minimum branch (2% of 10 = 0.2 < 1), so the 2% rate is never exercised.",
+          "Constant fee 1 passes the case and the floor property (min 0), yet ignores the 2% rule for price > 50."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-08",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 8.1,
+        "keyRule": "Delivery span counts only business days: calendar days minus weekend days.",
+        "counterexample": "function delivery_span({calendar, weekend}) { return calendar - 2; }",
+        "reasons": [
+          "The only case (calendar 3, weekend 2 -> days 1) is satisfied by calendar-2, which ignores the weekend input and subtracts a constant, or by a constant 1.",
+          "The floor property only requires days >= 0 and does not pin the weekend subtraction, so a wrong rule passes every case and property."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.6,
+        "keyRule": "Only business days are counted: result = calendar days minus weekend days.",
+        "counterexample": "function delivery_span({calendar, weekend}) { return Math.max(0, calendar - 2); }",
+        "reasons": [
+          "Single case (calendar 3, weekend 2 -> 1) is satisfied by ignoring the weekend input and subtracting a constant 2; floor property (>=0) holds via Math.max.",
+          "No case or property ties the output to the weekend input, so an implementation can ignore it and still pass."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-09",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.4,
+        "keyRule": "length >= 8 (inclusive threshold at 8)",
+        "counterexample": "function accepted(length){ return length > 8; }",
+        "reasons": [
+          "Only case is length 9, so an implementation using strict > 8 (rejecting exactly 8) passes it.",
+          "No case pins the boundary at 8 and the floor property only bounds seen >= 0, so the 'at least' inclusive boundary is unchecked."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.9,
+        "keyRule": "Threshold: length >= 8 is accepted (8 is the boundary)",
+        "counterexample": "function password(length){ return { accepted: length >= 9, seen: length }; }",
+        "reasons": [
+          "The only case is length 9 -> accepted true, so any threshold at or below 9 passes it; the sentence's boundary of 8 is never exercised.",
+          "No case for length 8 (accepted) or 7 (rejected); floor property only bounds seen >= 0, so >= 9 satisfies every case and property while rejecting an 8-character password."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-10",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.7,
+        "keyRule": "sold never exceeds stock (sold = min(stock, requested))",
+        "counterexample": "function sell(stock, requested){ return (stock===2 && requested===5) ? 2 : requested; }",
+        "reasons": [
+          "Only one case (stock 2, requested 5 -> 2) and the floor property (sold >= 0) exist; nothing bounds sold by stock, so an implementation returning requested in all other inputs (e.g. stock 1, requested 5 -> 5) oversells yet passes every case and property."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 5.7,
+        "keyRule": "sold must never exceed stock on hand (sold <= stock)",
+        "counterexample": "function sell(stock, requested) { return stock === 2 ? Math.min(stock, requested) : requested; }",
+        "reasons": [
+          "The only case is stock 2, requested 5 -> sold 2; the only property is sold >= 0. Nothing bounds sold above by stock, so selling requested when stock is not 2 (e.g. stock 1, requested 5 -> 5) passes everything while overselling."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-11",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.2,
+        "keyRule": "Order: the first matching coupon is applied, not a later or better one.",
+        "counterexample": "function coupon(first, second) { return Math.max(first, second); }",
+        "reasons": [
+          "The only case (first=10, second=5 -> 10) is also satisfied by max(first, second), which picks the best coupon rather than the first; the floor property (>= 0) also holds.",
+          "No case has a first coupon smaller than the second, so nothing pins the order rule."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.2,
+        "keyRule": "Order: the first matching coupon is applied, not another one (first takes precedence over second).",
+        "counterexample": "function coupon(first, second) { return { discount: Math.max(first, second) }; }",
+        "reasons": [
+          "The only case (first 10, second 5 -> 10) is also satisfied by picking the larger coupon, so it does not pin down 'first'.",
+          "The floor property (discount >= 0) holds for max given non-negative inputs.",
+          "No case where second > first, so first-vs-best is never distinguished."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-12",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 8,
+        "keyRule": "refund = price * (total - used) / total, i.e. only the unused fraction of the price",
+        "counterexample": "function refund({price, used, total}) { return price * 0.75; }",
+        "reasons": [
+          "The only case (price 100, used 1, total 4 -> 75) is satisfied by a constant 0.75 factor, ignoring used and total.",
+          "The floor property only requires refund >= 0, which the constant satisfies, so nothing pins the unused-days proportion."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.4,
+        "keyRule": "Refund is proportional to unused days: price * (total - used) / total",
+        "counterexample": "function refund(price, used, total) { return 75; }",
+        "reasons": [
+          "The only case (price 100, used 1, total 4 -> 75) is satisfied by a constant 75 or by price * 0.75 or price - 25 * used; the floor property (min 0) is also satisfied.",
+          "No case or property pins how the refund scales with price, used or total, so the unused-days rule is untested."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-13",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 7.9,
+        "keyRule": "Products are ordered by name",
+        "counterexample": "function sort(aId,bId){ return { first: 'a', seen: 0 }; }",
+        "reasons": [
+          "The only case (aId 2, bId 1 -> first a) is satisfied by always returning 'a'; the floor property only bounds seen >= 0.",
+          "Inputs are ids, not names, so the contract never ties the result to name order; it also fits an id-descending reading and limitations does not name the choice."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.2,
+        "keyRule": "Products are ordered by name (not by id or any other key)",
+        "counterexample": "function sort({aId,bId}){ return { first: aId > bId ? 'a' : 'b', seen: 0 }; }",
+        "reasons": [
+          "No input carries a name; inputs are only aId and bId, so the contract cannot distinguish name order from id order.",
+          "The single case (aId 2, bId 1 -> first a) is satisfied by ordering by id descending, and the floor property (seen >= 0) is satisfied trivially.",
+          "Hidden ambiguity: how ids map to names is not stated and limitations does not name it."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-14",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 5.8,
+        "keyRule": "Registration is rejected whenever the email already exists (existing >= 1), otherwise accepted.",
+        "counterexample": "function register({existing}){ return {status: existing === 1 ? 'REJECTED' : 'ACCEPTED', seen: existing}; }",
+        "reasons": [
+          "The only case is existing=1 -> REJECTED; an implementation that rejects only when existing===1 passes it.",
+          "The only property is the seen floor (min 0), which says nothing about status, so existing=2 or more being ACCEPTED violates the sentence yet passes everything."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 5.9,
+        "keyRule": "A register call is rejected only when the email already exists (existing > 0); otherwise it is accepted.",
+        "counterexample": "function register(existing){ return {status:'REJECTED', seen:0}; }",
+        "reasons": [
+          "The only case is existing=1 -> REJECTED; an implementation that always returns REJECTED (even for existing=0) satisfies it and the floor property (seen>=0).",
+          "No case pins ACCEPTED for a non-duplicate, so over-rejection is undetected."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-15",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 8.3,
+        "keyRule": "When the payment call times out, the result is the fallback value.",
+        "counterexample": "function payment_fetch({wait}) { return { value: wait === 100 ? 'fallback' : 'error', seen: 0 }; }",
+        "reasons": [
+          "The only case is wait=100 -> fallback. An implementation that returns fallback only for wait exactly 100 and error otherwise passes the case and the bounded_output floor, yet fails to return the fallback for longer waits (e.g. 5000) that are also timeouts.",
+          "No case or property pins what counts as a timeout or that larger waits also yield the fallback, and limitations does not name this choice."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 10.3,
+        "keyRule": "Only when the payment fetch times out, return the fallback (timeout is the condition that triggers the fallback).",
+        "counterexample": "function payment_fetch({wait}){ return { value: 'fallback', seen: 0 }; }",
+        "reasons": [
+          "The only case (wait 100 -> fallback) and the floor property (seen >= 0) are satisfied by an implementation that returns the fallback unconditionally, so the 'on timeout' condition is never exercised.",
+          "No case shows a non-timeout wait returning something other than fallback, and no timeout threshold is defined, so the condition is untested and the threshold is not named in limitations."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-16",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 7.2,
+        "keyRule": "total = price plus tax computed from price and rate (price*(1+rate/100))",
+        "counterexample": "function total(price, rate) { return price + rate; }",
+        "reasons": [
+          "The only case (price 100, rate 10, total 110) is satisfied by adding rate flat to price; the floor property (total >= 0) also holds, so the tax computation is never pinned down.",
+          "Rate is also ambiguous as percent vs fraction; the case fits only percent, and limitations does not name the choice."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.5,
+        "keyRule": "total = price plus tax computed from price and rate (tax scales with price)",
+        "counterexample": "function total(price, rate){ return price + rate; }",
+        "reasons": [
+          "The only case (price 100, rate 10 -> 110) is also satisfied by price + rate, which ignores that tax is a function of price; the floor property (min 0) also holds.",
+          "Rate meaning (percent vs fraction) is also only pinned by one case, so a single data point cannot distinguish tax = price*rate/100 from tax = rate."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-17",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 5,
+        "keyRule": "Threshold: age strictly under 12 pays half the fare; age 12 and above pays full.",
+        "counterexample": "function ticket_price(age, fare){ return age <= 10 ? fare/2 : fare; }",
+        "reasons": [
+          "The only case is age 10 / fare 100 -> 50, so the 12 threshold is never exercised; the counterexample uses a threshold of 10, passes the case and the non-negative floor property.",
+          "No case at ages 11 or 12, so the boundary (under 12 vs 12 or over) is unpinned, and age 11 would be charged full."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 6.8,
+        "keyRule": "Age threshold: children under 12 (age < 12) pay half the fare, otherwise full fare",
+        "counterexample": "function ticket_price(age, fare) { return age <= 10 ? fare / 2 : fare; }",
+        "reasons": [
+          "Only case is age 10, fare 100 -> 50; it does not probe the threshold at 12, so a wrong cutoff (e.g. age <= 10 or age < 11) passes.",
+          "The floor property (due >= 0) is satisfied by any non-negative output including the counterexample.",
+          "Ages 11 would be charged full fare by the counterexample, violating 'under 12', yet every case and property passes."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-18",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.3,
+        "keyRule": "On equal scores the leader wins (not the challenger).",
+        "counterexample": "function rank(leader, challenger) { if (leader === 5 && challenger === 5) return { winner: 'leader', seen: 0 }; return { winner: challenger >= leader ? 'challenger' : 'leader', seen: 0 }; }",
+        "reasons": [
+          "The only case is a tie at 5/5, so an implementation can special-case it and hand every other tie to the challenger.",
+          "No property constrains winner; the floor property only bounds seen, so it cannot catch the broken rule for ties like 3/3."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 8.1,
+        "keyRule": "On equal scores the winner is the leader, not the challenger.",
+        "counterexample": "function rank(leader, challenger){ if (leader === challenger) return leader === 5 ? 'leader' : 'challenger'; return leader > challenger ? 'leader' : 'challenger'; }",
+        "reasons": [
+          "The only case ties at 5/5, so an implementation that keeps the leader only for that exact value passes the case and the floor property while breaking the rule for every other tie.",
+          "No property states tie behaviour for general equal inputs."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-19",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.9,
+        "keyRule": "Any negative qty (qty < 0) yields REJECTED",
+        "counterexample": "function quantity(qty){ return { status: qty === -1 ? 'REJECTED' : 'ACCEPTED', seen: 0 }; }",
+        "reasons": [
+          "The only case is qty=-1; an implementation rejecting only -1 returns REJECTED for it.",
+          "The only property is bounded_output seen>=0, which seen=0 satisfies.",
+          "Precondition allows qty from -100, so -2..-100 are in-domain negatives, yet no case covers them and the stub accepts them."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 7.9,
+        "keyRule": "Any negative qty must be rejected (status REJECTED)",
+        "counterexample": "function quantity(qty){ return { status: qty === -1 ? 'REJECTED' : 'ACCEPTED', seen: 0 }; }",
+        "reasons": [
+          "The only case is qty=-1; an implementation rejecting only -1 passes it and the floor property (seen >= 0) while accepting -2, -50, -0.5 etc.",
+          "No case or property covers any other negative value, nor the accepted side (non-negative)."
+        ]
+      },
+      "agree": true
+    },
+    {
+      "id": "RF-20",
+      "v1": "REJECT",
+      "a": {
+        "verdict": "REJECT",
+        "seconds": 6.9,
+        "keyRule": "Purchase is allowed when used equals limit (inclusive boundary), and below it.",
+        "counterexample": "function purchase_limit(used, limit) { return { allowed: used === limit, seen: used }; }",
+        "reasons": [
+          "The only case is used=10, limit=10 -> allowed true; the function returns true there but also returns false for used=5, limit=10, which the sentence (limit inclusive, so under-limit is allowed) requires to be true.",
+          "No case covers used below limit and no property constrains allowed, so any implementation that is true only at equality passes."
+        ]
+      },
+      "b": {
+        "verdict": "REJECT",
+        "seconds": 7.5,
+        "keyRule": "When used equals limit the purchase is allowed (allowed iff used <= limit).",
+        "counterexample": "function purchase_limit(used, limit) { return { allowed: used < limit || (used === 10 && limit === 10), seen: used }; }",
+        "reasons": [
+          "The only case pins used=10, limit=10; the sole property is the template floor on seen, so nothing constrains inclusivity at other values.",
+          "The counterexample passes the edge case and floor but returns allowed=false for used=5, limit=5, breaking 'inclusive'."
+        ]
+      },
+      "agree": true
+    }
+  ]
+}
